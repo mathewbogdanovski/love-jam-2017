@@ -62,7 +62,7 @@ function mPauseState:enter()
 
 end
 
-function mGameState:keypressed(key)
+function mPauseState:keypressed(key)
 	if key == "escape" then
 		return Gamestate.pop(mPauseState)
 	end
