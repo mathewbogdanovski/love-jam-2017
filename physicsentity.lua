@@ -12,4 +12,5 @@ function PhysicsEntity:update(dt)
 	PhysicsEntity.super.update(dt)
 	self.position.x = self.body:getX()
 	self.position.y = self.body:getY()
+	self.rotation = self.body:getAngle()
 end
