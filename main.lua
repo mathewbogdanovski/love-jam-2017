@@ -91,6 +91,7 @@ function mMenuState:keypressed(key)
 	if key == "escape" then
 		return love.event.quit()
 	end
+	uiManager:keyDown(key, scancode, isrepeat)
 end
 
 function mMenuState:mousemoved(x, y, dx, dy)
@@ -103,10 +104,6 @@ end
 
 function mMenuState:mousereleased(x, y, button, isTouch)
     uiManager:mouseUp(x, y, button, isTouch)
-end
-
-function mMenuState:keypressed(key, scancode, isrepeat)
-    uiManager:keyDown(key, scancode, isrepeat)
 end
 
 function mMenuState:keyreleased(key)
