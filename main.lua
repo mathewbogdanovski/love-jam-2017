@@ -1,4 +1,6 @@
 --! file: main.lua
+require "catui"
+
 Gamestate = require "Libraries.hump.gamestate"
 Assets = require("Libraries.cargo.cargo").init("Assets")
 

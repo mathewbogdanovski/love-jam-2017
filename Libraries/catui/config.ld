@@ -1,5 +1,0 @@
-project='catui'
-title='a little GUILib'
-description='a little GUILib'
-format='markdown'
-file='.'
