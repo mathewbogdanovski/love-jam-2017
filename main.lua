@@ -79,12 +79,10 @@ end
 
 function mMenuState:draw()
     uiManager:draw()
-    entity:draw()
 end
 
 function mMenuState:update(dt)
 	uiManager:update(dt)
-	entity:update(dt)
 end
 
 function mMenuState:keypressed(key)
@@ -129,8 +127,13 @@ function mGameState:enter()
 	loadGameUI()
 end
 
+function mGameState:draw()
+	entity:draw()
+end
+
 function mGameState:update(dt)
 	uiManager:update(dt)
+	entity:update(dt)
 end
 
 function mGameState:keypressed(key)
