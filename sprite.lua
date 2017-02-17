@@ -3,10 +3,11 @@ Sprite = Object:extend()
 
 Vector = require "Libraries.hump.vector"
 
-function Sprite:new(x, y, w, h)
+function Sprite:new(image, x, y, sx, sy)
 	self.position = Vector(x, y)
 	self.rotation = 0
-	self.size = Vector(w, h)
+	self.scale = Vector(sx, sy)
+	self.image = image
 end
 
 function Sprite:update(dt)
@@ -14,5 +15,5 @@ function Sprite:update(dt)
 end
 
 function Sprite:draw()
-    love.graphics.rectangle("line", self.position.x, self.position.y, self.size.x, self.size.y)
+    love.graphics.draw(self.image, self.position.x, self.position.y, self.rotation, self.scale.x, self.scale.y)
 end

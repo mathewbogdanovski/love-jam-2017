@@ -3,8 +3,8 @@ Entity = Sprite:extend()
 
 Vector = require "Libraries.hump.vector"
 
-function Entity:new(x, y, w, h, s)
-	Entity.super.new(self, x, y, w, h)
+function Entity:new(image, x, y, sx, sy, s)
+	Entity.super.new(self, image, x, y, sx, sy)
     self.speed = s
     self.direction = Vector(1, 0)
 end
