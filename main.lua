@@ -4,9 +4,13 @@ require "catui"
 Assets = require("Libraries.cargo.cargo").init("Assets")
 Gamestate = require "Libraries.hump.gamestate"
 
+--States--
 local mMenuState = {}
 local mGameState = {}
 local mPauseState = {}
+
+--Game Globals--
+local mEntities = {}
 
 local function initWindow()
 	love.window.setTitle("Game name")
@@ -16,16 +20,20 @@ end
 function love.load()
 	initWindow()
 
-	Object = require "Libraries.classic.classic"
-	require "sprite"
-	require "entity"
-
 	--local cursor = love.mouse.newCursor("Assets/Graphics/UI/cursor.png", 0, 0)
 	--love.mouse.setCursor(cursor)
 
 	uiManager = UIManager:getInstance()
 
-	entity = Entity(Assets.Graphics.Sprites.box, 100, 100, 1, 1, 100)
+	physicsWorld = love.physics.newWorld(0, 0, true)
+
+	Object = require "Libraries.classic.classic"
+	require "sprite"
+	require "entity"
+	require "physicsentity"
+
+	local entity = PhysicsEntity(Assets.Graphics.Sprites.box, 100, 100, 1, 1)
+	table.insert(mEntities, entity)
 
 	Gamestate.registerEvents()
 	Gamestate.switch(mMenuState)
@@ -128,12 +136,18 @@ function mGameState:enter()
 end
 
 function mGameState:draw()
-	entity:draw()
+	for i=1,#mEntities do
+		mEntities[i]:draw()
+	end
 end
 
 function mGameState:update(dt)
 	uiManager:update(dt)
-	entity:update(dt)
+	physicsWorld:update(dt)
+
+	for i=1,#mEntities do
+		mEntities[i]:update(dt)
+	end
 end
 
 function mGameState:keypressed(key)
