@@ -75,7 +75,7 @@ function UIButton:initTheme(_theme)
     self.disableColor = theme.button.disableColor
     self.strokeColor = theme.button.strokeColor
     self.stroke = theme.button.stroke
-    self.font = love.graphics.newFont(theme.button.font, theme.button.fontSize)
+    self.font = love.graphics.getFont()
     self.textDrawable = love.graphics.newText(self.font, self.text)
     self.fontColor = theme.button.fontColor
     self.iconDir = theme.button.iconDir

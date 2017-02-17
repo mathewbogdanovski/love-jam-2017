@@ -55,13 +55,11 @@ function UIContent:init()
     self.contentCtrl = UIControl:new()
     UIControl.addChild(self, self.contentCtrl)
 
-    -- 垂直
     self.vBar = UIScrollBar:new()
     self.vBar:setDir("vertical")
     self.vBar.events:on(UI_ON_SCROLL, self.onVBarScroll, self)
     UIControl.addChild(self, self.vBar)
 
-    -- 水平
     self.hBar = UIScrollBar:new()
     self.hBar:setDir("horizontal")
     self.hBar.events:on(UI_ON_SCROLL, self.onHBarScroll, self)
