@@ -17,3 +17,11 @@ end
 function Sprite:draw()
     love.graphics.draw(self.image, self.position.x, self.position.y, self.rotation, self.scale.x, self.scale.y)
 end
+
+function Sprite:SetPosition(position)
+	self.position = position
+end
+
+function Sprite:SetRotation(rotation)
+	self.rotation = rotation
+end

@@ -13,3 +13,11 @@ function Entity:update(dt)
 	Entity.super.update(dt)
     self.position = self.position + (self.direction * self.speed * dt)
 end
+
+function Entity:SetSpeed(speed)
+	self.speed = speed
+end
+
+function Entity:SetDirection(direction)
+	self.direction = direction
+end
