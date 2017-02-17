@@ -32,7 +32,10 @@ function love.load()
 	require "entity"
 	require "physicsentity"
 
-	local entity = PhysicsEntity(Assets.Graphics.Sprites.box, 100, 100, 1, 1)
+	local entity = PhysicsEntity(Assets.Graphics.Sprites.box, 100, 100, 64, 64)
+	entity.body:setLinearVelocity(50, 0)
+	table.insert(mEntities, entity)
+	entity = PhysicsEntity(Assets.Graphics.Sprites.box, 400, 100, 64, 64)
 	table.insert(mEntities, entity)
 
 	Gamestate.registerEvents()
