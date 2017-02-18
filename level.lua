@@ -19,8 +19,6 @@ function Level:update(dt)
 end
 
 function Level:load()
-	local entity = mEntityManager:CreateSheep(10, 10)
-	entity.physics.body:setLinearVelocity(50, 0)
-	
-	mEntityManager:CreateSheep(400, 10)
+	mEntityManager:CreateSheep(200, 100)
+	mEntityManager:CreateSheep(400, 100)
 end

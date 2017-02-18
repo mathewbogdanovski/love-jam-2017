@@ -50,3 +50,8 @@ end
 function Avatar:GetSpeed()
     return(self.baseSpeed * self.speedMultiplier)
 end
+
+function Avatar:MoveInDirection(direction)
+    local speed = self:GetSpeed()
+    self:SetVelocity(direction.x * speed, direction.y * speed)
+end

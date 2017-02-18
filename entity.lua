@@ -1,12 +1,10 @@
 Entity = Object:extend()
 
-Vector = require "Libraries.hump.vector"
-
 function Entity:new(image, x, y)
     self.position = Vector(x, y)
     self.rotation = 0
-    self.imageScale = Vector(1.0, 1.0)
     self.image = image
+    self.imageSize = Vector(self.image:getWidth(), self.image:getHeight())
     self.visible = true
     self.physics = nil
 end
@@ -21,12 +19,16 @@ end
 
 function Entity:draw()
     if self.visible == true then
-        love.graphics.draw(self.image, self.position.x, self.position.y, self.rotation, self.imageScale.x, self.imageScale.y)
+        love.graphics.draw(self.image, self.position.x, self.position.y, self.rotation, self.imageSize.x / self.image:getWidth(), self.imageSize.y / self.image:getHeight(), self.imageSize.x / 2, self.imageSize.y / 2)
     end
 end
 
 function Entity:SetPosition(position)
-    self.position = position
+    if physics ~= nil then
+        self.physics.body:setPosition(position)
+    else
+        self.position = position
+    end
 end
 
 function Entity:GetPosition()
@@ -34,14 +36,31 @@ function Entity:GetPosition()
 end
 
 function Entity:SetRotation(rotation)
-    self.rotation = rotation % (2 * math.pi)
+    local finalRotation = rotation % (2 * math.pi)
+    if physics ~= nil then
+        self.physics.body:setAngle(rotation)
+    else
+        self.rotation = rotation
+    end
 end
 
 function Entity:GetRotation()
     return(self.rotation)
 end
 
-function Entity:SetVisibile(visible)
+function Entity:SetImageSize(size)
+    if physics == nil then
+        self.imageSize = size
+    else
+        print('BAD: Trying to force image size on a physics controlled entity')
+    end
+end
+
+function Entity:GetImageSize()
+    return(self.imageSize)
+end
+
+function Entity:SetVisible(visible)
     self.visible = visible
 end
 
@@ -55,10 +74,18 @@ function Entity:CreatePhysics(w, h, type)
     self.physics.shape = love.physics.newRectangleShape(0, 0, w, h)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape, 1)
 
-    self.imageScale.x = w  / self.image:getWidth()
-    self.imageScale.y = h / self.image:getHeight()
+    self.imageSize.x = w
+    self.imageSize.y = h
 end
 
 function Entity:HasPhysics()
     return(self.physics ~= nil)
+end
+
+function Entity:SetVelocity(x, y)
+    if self.physics ~= nil then
+        self.physics.body:setLinearVelocity(x, y)
+    else
+        print('BAD: Trying to move an entity with no physics')
+    end
 end

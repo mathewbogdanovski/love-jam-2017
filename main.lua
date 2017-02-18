@@ -1,6 +1,8 @@
 --! file: main.lua
 require "catui"
 
+Vector = require "Libraries.hump.vector"
+
 Object = require "Libraries.classic.classic"
 require "level"
 
