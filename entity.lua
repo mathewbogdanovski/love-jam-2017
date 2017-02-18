@@ -51,7 +51,7 @@ end
 
 function Entity:CreatePhysics(w, h, type)
     self.physics = {}
-    self.physics.body = love.physics.newBody(physicsWorld, self.position.x, self.position.y, type) -- types: "dynamic" "kinematic" "static" 
+    self.physics.body = love.physics.newBody(mPhysicsWorld, self.position.x, self.position.y, type) -- types: "dynamic" "kinematic" "static" 
     self.physics.shape = love.physics.newRectangleShape(0, 0, w, h)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape, 1)
 
