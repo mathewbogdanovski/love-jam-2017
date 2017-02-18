@@ -26,6 +26,12 @@ function EntityManager:CreateBoxEntity(x, y, physics)
 	return self:AddEntity(entity)
 end
 
+function EntityManager:CreateSheep(x, y)
+	local avatar = Avatar(Assets.Graphics.Sheep, x, y)
+	avatar:CreatePhysics(64, 64, "dynamic")
+	return self:AddEntity(avatar)
+end
+
 function EntityManager:AddEntity(entity)
 	table.insert(self.entities, entity)
 	return entity
