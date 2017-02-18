@@ -1,4 +1,3 @@
-require "gameConstants"
 require "entity"
 
 Avatar = Entity:extend()

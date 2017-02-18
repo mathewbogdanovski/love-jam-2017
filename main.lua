@@ -20,6 +20,7 @@ local mLevel = nil
 local function initWindow()
     love.window.setTitle("Game name")
     love.window.setIcon(love.image.newImageData("Assets/Graphics/Sheep.png"))
+    love.graphics.setBackgroundColor(0, 100, 0, 255)
 end
 
 function love.load()
@@ -42,6 +43,11 @@ end
 
 function love.update(dt)
 
+end
+
+function love.resize(w, h)
+    PHYSICS_TO_WORLD_X = w / WORLD_MAX_X
+    PHYSICS_TO_WORLD_Y = h / WORLD_MAX_Y
 end
 
 --------------- MENU STATE ---------------

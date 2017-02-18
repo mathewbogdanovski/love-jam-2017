@@ -8,7 +8,7 @@ end
 
 function EntityManager:draw()
     for i,entity in ipairs(self.entities) do
-    entity:draw()
+		entity:draw()
     end
 end
 

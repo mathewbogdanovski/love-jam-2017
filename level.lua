@@ -19,6 +19,6 @@ function Level:update(dt)
 end
 
 function Level:load()
-    mEntityManager:CreateSheep(200, 100)
-    mEntityManager:CreateSheep(400, 100)
+    mEntityManager:CreateSheep(300, 250)
+    mEntityManager:CreateSheep(500, 250)
 end
