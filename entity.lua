@@ -1,12 +1,16 @@
 Entity = Object:extend()
 
-function Entity:new(image, x, y)
+MIN_SCALE = 0.05
+
+function Entity:new(sprite, x, y)
     self.position = Vector(x, y)
     self.rotation = 0
-    self.image = image
-    self.imageSize = Vector(self.image:getWidth(), self.image:getHeight())
+    self.sprite = sprite
     self.visible = true
     self.physics = nil
+    self.scale = 1.0
+    self.spriteWidthRatio = 1.0
+    self.spriteHeightRatio = 1.0
 end
 
 function Entity:update(dt)
@@ -18,16 +22,22 @@ function Entity:update(dt)
 end
 
 function Entity:draw()
-    if self.visible == true then
-        love.graphics.draw(self.image, self.position.x, self.position.y, self.rotation, self.imageSize.x / self.image:getWidth(), self.imageSize.y / self.image:getHeight(), self.imageSize.x / 2, self.imageSize.y / 2)
+    if self.visible == true and self.scale > MIN_SCALE then
+        love.graphics.draw(self.sprite,
+                            self.position.x,
+                            self.position.y,
+                            self.rotation,
+                            self.spriteWidthRatio * self.scale,
+                            self.spriteHeightRatio * self.scale,
+                            (self.sprite:getWidth()) / 2 * self.scale, 
+                            (self.sprite:getHeight()) / 2 * self.scale)
     end
 end
 
 function Entity:SetPosition(position)
+    self.position = position
     if physics ~= nil then
         self.physics.body:setPosition(position)
-    else
-        self.position = position
     end
 end
 
@@ -36,28 +46,14 @@ function Entity:GetPosition()
 end
 
 function Entity:SetRotation(rotation)
-    local finalRotation = rotation % (2 * math.pi)
+    self.rotation = rotation % (2 * math.pi)
     if physics ~= nil then
-        self.physics.body:setAngle(rotation)
-    else
-        self.rotation = rotation
+        self.physics.body:setAngle(self.rotation)
     end
 end
 
 function Entity:GetRotation()
     return(self.rotation)
-end
-
-function Entity:SetImageSize(size)
-    if physics == nil then
-        self.imageSize = size
-    else
-        print('BAD: Trying to force image size on a physics controlled entity')
-    end
-end
-
-function Entity:GetImageSize()
-    return(self.imageSize)
 end
 
 function Entity:SetVisible(visible)
@@ -68,24 +64,50 @@ function Entity:IsVisible()
     return(self.visible)
 end
 
-function Entity:CreatePhysics(w, h, type)
-    self.physics = {}
-    self.physics.body = love.physics.newBody(mPhysicsWorld, self.position.x, self.position.y, type) -- types: "dynamic" "kinematic" "static" 
-    self.physics.shape = love.physics.newRectangleShape(0, 0, w, h)
-    self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape, 1)
+function Entity:UpdatePhysics()
+    --TODO: should remove/disable physics when at min scale
 
-    self.imageSize.x = w
-    self.imageSize.y = h
+    self.physics.shape = love.physics.newRectangleShape(0, 0, self.spriteWidthRatio * self.scale, self.spriteHeightRatio * self.scale)
+    self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape, 1)
 end
+
+function Entity:RegisterPhysics(w, h, type)
+    self.physics = {}
+    self.physics.body = love.physics.newBody(mPhysicsWorld, self.position.x, self.position.y, type) -- types: "dynamic" "kinematic" "static"
+    
+    self.spriteWidthRatio = self.sprite and (w / self.sprite:getWidth()) or 1.0
+    self.spriteHeightRatio = self.sprite and (h / self.sprite:getHeight()) or 1.0
+
+    self:UpdatePhysics()
+end
+
+
 
 function Entity:HasPhysics()
     return(self.physics ~= nil)
 end
 
-function Entity:SetVelocity(x, y)
+function Entity:SetVelocity(velocity)
     if self.physics ~= nil then
-        self.physics.body:setLinearVelocity(x, y)
+        self.physics.body:setLinearVelocity(velocity.x, velocity.y)
     else
         print('BAD: Trying to move an entity with no physics')
     end
+end
+
+function Entity:GetVelocity()
+    if self.physics == nil then
+        return(Vector(0,0))
+    else
+        return(Vector(self.physics.body:getLinearVelocity()))
+    end
+end
+
+function SetScale(scale)
+    if scale < MIN_SCALE then
+        scale = MIN_SCALE
+    end
+
+    self.scale = scale
+    self:UpdatePhysics()
 end

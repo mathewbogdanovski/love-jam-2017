@@ -21,7 +21,7 @@ end
 function EntityManager:CreateBoxEntity(x, y, physics)
 	local entity = Entity(Assets.Graphics.Sprites.Box, x, y)
 	if physics then
-		entity:CreatePhysics(64, 64, "dynamic")
+		entity:RegisterPhysics(64, 64, "dynamic")
 	end
 	return self:AddEntity(entity)
 end

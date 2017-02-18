@@ -9,7 +9,7 @@ local MAX_IDLE_TIME = 3
 function Sheep:new(x, y)
     Sheep.super.new(self, Assets.Graphics.Sheep, x, y)
     self:SetFaction(GC_FACTIONS.PLAYER)
-    self:CreatePhysics(64, 64, "dynamic")
+    self:RegisterPhysics(64, 64, "dynamic")
     self.baseSpeed = 50
     self.idleTime = math.random(MIN_IDLE_TIME, MAX_IDLE_TIME)
     self.idleTimer = self.idleTime
