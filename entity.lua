@@ -1,4 +1,3 @@
---! file: entity.lua
 Entity = Object:extend()
 
 Vector = require "Libraries.hump.vector"
@@ -8,6 +7,7 @@ function Entity:new(image, x, y)
     self.rotation = 0
     self.image = image
     self.visible = true
+    self.physics = nil
 end
 
 function Entity:update(dt)
@@ -24,10 +24,26 @@ function Entity:SetPosition(position)
     self.position = position
 end
 
-function Entity:SetRotation(rotation)
-    self.rotation = rotation
+function Entity:GetPosition()
+    return(self.position)
 end
 
-function Entity:SetVisibility(visible)
+function Entity:SetRotation(rotation)
+    self.rotation = rotation % (2 * math.pi)
+end
+
+function Entity:GetRotation()
+    return(self.rotation)
+end
+
+function Entity:SetVisibile(visible)
     self.visible = visible
+end
+
+function Entity:IsVisible()
+    return(self.visible)
+end
+
+function Entity:HasPhysics()
+    return(self.physics ~= nil)
 end

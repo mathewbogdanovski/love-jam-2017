@@ -29,7 +29,6 @@ function love.load()
 
     Object = require "Libraries.classic.classic"
     require "entity"
-    require "physicsentity"
 
     Gamestate.registerEvents()
     Gamestate.switch(mMenuState)
@@ -129,10 +128,10 @@ end
 function mGameState:enter()
     uiManager:init()
     loadGameUI()
-    local entity = PhysicsEntity(Assets.Graphics.Sprites.box, 100, 100, 64, 64)
-    entity.body:setLinearVelocity(50, 0)
+    local entity = Entity(Assets.Graphics.Sprites.box, 100, 100, 64, 64)
+    --entity.body:setLinearVelocity(50, 0)
     table.insert(mEntities, entity)
-    entity = PhysicsEntity(Assets.Graphics.Sprites.box, 400, 100, 64, 64)
+    entity = Entity(Assets.Graphics.Sprites.box, 400, 100, 64, 64)
     table.insert(mEntities, entity)
 end
 
