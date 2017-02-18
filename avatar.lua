@@ -7,7 +7,7 @@ function Avatar:new(image, x, y)
     Avatar.super.new(self, image, x, y)
     self.health = 100
     self.killed = false
-    self.faction = GC_FACTIONS[NONE]
+    self.faction = GC_FACTIONS.NONE
     self.speedMultiplier = 1.0
     self.baseSpeed = 5
 end

@@ -1,6 +1,6 @@
 EntityManager = Object:extend()
 
-require "avatar"
+require "sheep"
 
 function EntityManager:new()
 	self.entities = {}
@@ -21,15 +21,14 @@ end
 function EntityManager:CreateBoxEntity(x, y, physics)
 	local entity = Entity(Assets.Graphics.Sprites.Box, x, y)
 	if physics then
-		entity:CreatePhysics(20, 20, "dynamic")
+		entity:CreatePhysics(64, 64, "dynamic")
 	end
 	return self:AddEntity(entity)
 end
 
 function EntityManager:CreateSheep(x, y)
-	local avatar = Avatar(Assets.Graphics.Sheep, x, y)
-	avatar:CreatePhysics(64, 64, "dynamic")
-	return self:AddEntity(avatar)
+	local sheep = Sheep(x, y)
+	return self:AddEntity(sheep)
 end
 
 function EntityManager:AddEntity(entity)
