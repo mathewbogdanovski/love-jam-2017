@@ -53,4 +53,10 @@ end
 
 function Avatar:MoveInDirection(direction)
     self:SetVelocity(self:GetSpeed() * direction)
+
+    if direction.x < 0 then
+        self:SetSpriteHorizontalMirror(false)
+    elseif direction.x > 0 then
+        self:SetSpriteHorizontalMirror(true)
+    end
 end

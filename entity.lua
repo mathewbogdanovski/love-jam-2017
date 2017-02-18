@@ -6,6 +6,8 @@ function Entity:new(sprite, x, y)
     self.position = Vector(x, y)
     self.rotation = 0
     self.sprite = sprite
+    self.mirrorSpriteHorizontal = 1.0
+    self.mirrorSpriteVertical = 1.0
     self.visible = true
     self.physics = nil
     self.scale = 1.0
@@ -27,8 +29,8 @@ function Entity:draw()
                             self.position.x,
                             self.position.y,
                             self.rotation,
-                            self.spriteWidthRatio * self.scale,
-                            self.spriteHeightRatio * self.scale,
+                            self.spriteWidthRatio * self.scale * self.mirrorSpriteHorizontal,
+                            self.spriteHeightRatio * self.scale * self.mirrorSpriteVertical,
                             (self.sprite:getWidth()) / 2 * self.scale, 
                             (self.sprite:getHeight()) / 2 * self.scale)
     end
@@ -110,4 +112,12 @@ function SetScale(scale)
 
     self.scale = scale
     self:UpdatePhysics()
+end
+
+function Entity:SetSpriteHorizontalMirror(mirrored)
+    self.mirrorSpriteHorizontal = mirrored and -1.0 or 1.0
+end
+
+function Entity:SetSpriteVerticalMirror(mirrored)
+    self.mirrorSpriteVertical = mirrored and -1.0 or 1.0
 end
