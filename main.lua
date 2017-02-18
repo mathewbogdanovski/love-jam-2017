@@ -28,7 +28,6 @@ function love.load()
     physicsWorld = love.physics.newWorld(0, 0, true)
 
     Object = require "Libraries.classic.classic"
-    require "sprite"
     require "entity"
     require "physicsentity"
 
