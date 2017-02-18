@@ -13,27 +13,27 @@ local mPauseState = {}
 local mEntities = {}
 
 local function initWindow()
-	love.window.setTitle("Game name")
-	love.window.setIcon(love.image.newImageData("Assets/Graphics/Sprites/box.png"))
+    love.window.setTitle("Game name")
+    love.window.setIcon(love.image.newImageData("Assets/Graphics/Sprites/box.png"))
 end
 
 function love.load()
-	initWindow()
+    initWindow()
 
-	--local cursor = love.mouse.newCursor("Assets/Graphics/UI/cursor.png", 0, 0)
-	--love.mouse.setCursor(cursor)
+    --local cursor = love.mouse.newCursor("Assets/Graphics/UI/cursor.png", 0, 0)
+    --love.mouse.setCursor(cursor)
 
-	uiManager = UIManager:getInstance()
+    uiManager = UIManager:getInstance()
 
-	physicsWorld = love.physics.newWorld(0, 0, true)
+    physicsWorld = love.physics.newWorld(0, 0, true)
 
-	Object = require "Libraries.classic.classic"
-	require "sprite"
-	require "entity"
-	require "physicsentity"
+    Object = require "Libraries.classic.classic"
+    require "sprite"
+    require "entity"
+    require "physicsentity"
 
-	Gamestate.registerEvents()
-	Gamestate.switch(mMenuState)
+    Gamestate.registerEvents()
+    Gamestate.switch(mMenuState)
 end
 
 function love.draw()
@@ -60,7 +60,7 @@ local function loadMainMenu()
     buttonA:setAnchor(0, 0)
 
     buttonA.events:on(UI_CLICK, function()
-    	Gamestate.switch(mGameState)
+        Gamestate.switch(mGameState)
     end, buttonA)
 
     content:addChild(buttonA)
@@ -71,15 +71,15 @@ local function loadMainMenu()
     buttonB:setAnchor(0, 0)
 
     buttonB.events:on(UI_CLICK, function()
-    	love.event.quit()
+        love.event.quit()
     end, buttonB)
 
     content:addChild(buttonB)
 end
 
 function mMenuState:enter()
-	uiManager:init()
-	loadMainMenu()
+    uiManager:init()
+    loadMainMenu()
 end
 
 function mMenuState:draw()
@@ -87,14 +87,14 @@ function mMenuState:draw()
 end
 
 function mMenuState:update(dt)
-	uiManager:update(dt)
+    uiManager:update(dt)
 end
 
 function mMenuState:keypressed(key)
-	if key == "escape" then
-		return love.event.quit()
-	end
-	uiManager:keyDown(key, scancode, isrepeat)
+    if key == "escape" then
+        return love.event.quit()
+    end
+    uiManager:keyDown(key, scancode, isrepeat)
 end
 
 function mMenuState:mousemoved(x, y, dx, dy)
@@ -128,35 +128,35 @@ local function loadGameUI()
 end
 
 function mGameState:enter()
-	uiManager:init()
-	loadGameUI()
-	local entity = PhysicsEntity(Assets.Graphics.Sprites.box, 100, 100, 64, 64)
-	entity.body:setLinearVelocity(50, 0)
-	table.insert(mEntities, entity)
-	entity = PhysicsEntity(Assets.Graphics.Sprites.box, 400, 100, 64, 64)
-	table.insert(mEntities, entity)
+    uiManager:init()
+    loadGameUI()
+    local entity = PhysicsEntity(Assets.Graphics.Sprites.box, 100, 100, 64, 64)
+    entity.body:setLinearVelocity(50, 0)
+    table.insert(mEntities, entity)
+    entity = PhysicsEntity(Assets.Graphics.Sprites.box, 400, 100, 64, 64)
+    table.insert(mEntities, entity)
 end
 
 function mGameState:draw()
-	for i=1,#mEntities do
-		mEntities[i]:draw()
-	end
+    for i=1,#mEntities do
+        mEntities[i]:draw()
+    end
 end
 
 function mGameState:update(dt)
-	uiManager:update(dt)
-	physicsWorld:update(dt)
+    uiManager:update(dt)
+    physicsWorld:update(dt)
 
-	for i=1,#mEntities do
-		mEntities[i]:update(dt)
-	end
+    for i=1,#mEntities do
+    mEntities[i]:update(dt)
+    end
 end
 
 function mGameState:keypressed(key)
-	if key == "escape" then
-		return Gamestate.push(mPauseState)
-	end
-	uiManager:keyDown(key, scancode, isrepeat)
+    if key == "escape" then
+        return Gamestate.push(mPauseState)
+    end
+    uiManager:keyDown(key, scancode, isrepeat)
 end
 
 function mGameState:mousemoved(x, y, dx, dy)
@@ -206,24 +206,24 @@ local function loadPauseMenu()
 end
 
 function mPauseState:enter()
-	uiManager:init()
-	loadPauseMenu()
+    uiManager:init()
+    loadPauseMenu()
 end
 
 function mPauseState:draw()
-	uiManager:draw()
+    uiManager:draw()
 end
 
 function mPauseState:update(dt)
-	uiManager:update(dt)
+    uiManager:update(dt)
 end
 
 function mPauseState:keypressed(key)
-	if key == "escape" then
-		Gamestate.pop(mPauseState)
-		return Gamestate.switch(mGameState)
-	end
-	uiManager:keyDown(key, scancode, isrepeat)
+    if key == "escape" then
+        Gamestate.pop(mPauseState)
+        return Gamestate.switch(mGameState)
+    end
+    uiManager:keyDown(key, scancode, isrepeat)
 end
 
 function mPauseState:mousemoved(x, y, dx, dy)
