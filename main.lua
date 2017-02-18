@@ -1,6 +1,7 @@
 --! file: main.lua
 require "catui"
 
+CScreen = require "Libraries.cscreen.cscreen"
 Assets = require("Libraries.cargo.cargo").init("Assets")
 Gamestate = require "Libraries.hump.gamestate"
 
@@ -13,6 +14,7 @@ local mPauseState = {}
 local mEntities = {}
 
 local function initWindow()
+    CScreen.init(800, 600, true)
     love.window.setTitle("Game name")
     love.window.setIcon(love.image.newImageData("Assets/Graphics/Sprites/box.png"))
 end
@@ -40,6 +42,10 @@ end
 
 function love.update(dt)
 
+end
+
+function love.resize(width, height)
+    CScreen.update(width, height)
 end
 
 --------------- MENU STATE ---------------
@@ -81,6 +87,10 @@ function mMenuState:enter()
 end
 
 function mMenuState:draw()
+    CScreen.apply()
+
+    CScreen.cease()
+
     uiManager:draw()
 end
 
@@ -136,9 +146,13 @@ function mGameState:enter()
 end
 
 function mGameState:draw()
+    CScreen.apply()
+
     for i=1,#mEntities do
         mEntities[i]:draw()
     end
+
+    CScreen.cease()
 end
 
 function mGameState:update(dt)
@@ -209,6 +223,10 @@ function mPauseState:enter()
 end
 
 function mPauseState:draw()
+    CScreen.apply()
+    
+    CScreen.cease()
+
     uiManager:draw()
 end
 
