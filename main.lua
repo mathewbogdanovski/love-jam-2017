@@ -27,7 +27,7 @@ function love.load()
     --love.mouse.setCursor(cursor)
 
     mUIManager = UIManager:getInstance()
-
+    
     mPhysicsWorld = love.physics.newWorld(0, 0, true)
 
     Gamestate.registerEvents()
