@@ -1,6 +1,6 @@
 Level = Object:extend()
 
-require "entity"
+require "avatar"
 
 function Level:new(stageNum)
 	self.stage = stageNum
