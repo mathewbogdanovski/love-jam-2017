@@ -13,10 +13,20 @@ function Sheep:new(x, y)
     self.baseSpeed = 50
     self.idleTime = math.random(MIN_IDLE_TIME, MAX_IDLE_TIME)
     self.idleTimer = self.idleTime
+    self.killedSprite = Assets.Graphics.SheepDead
+end
+
+function Sheep:Kill()
+    self.super.Kill(self)
+    self:SetSpriteVerticalMirror(true)
 end
 
 function Sheep:update(dt)
     Sheep.super.update(self, dt)
+
+    if self:IsKilled() then
+        return
+    end
 
     local mousePosition = Vector(love.mouse:getX(), love.mouse:getY())
     local distanceVector = self.position - mousePosition
