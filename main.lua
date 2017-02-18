@@ -17,7 +17,7 @@ local mLevel = nil
 
 local function initWindow()
     love.window.setTitle("Game name")
-    love.window.setIcon(love.image.newImageData("Assets/Graphics/Sprites/box.png"))
+    love.window.setIcon(love.image.newImageData("Assets/Graphics/Sheep.png"))
 end
 
 function love.load()
