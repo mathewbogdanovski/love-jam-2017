@@ -31,6 +31,7 @@ function love.load()
 
     Object = require "Libraries.classic.classic"
     require "entity"
+    require "avatar"
 
     Gamestate.registerEvents()
     Gamestate.switch(mMenuState)
@@ -138,10 +139,12 @@ end
 function mGameState:enter()
     uiManager:init()
     loadGameUI()
-    local entity = Entity(Assets.Graphics.Sprites.box, 100, 100, 64, 64)
+    local avatar = Avatar(Assets.Graphics.Sprites.box, 100, 100, 64, 64)
+    avatar:SetFaction(GC_FACTIONS[PLAYER])
+    local faction = avatar:GetFaction()
     --entity.body:setLinearVelocity(50, 0)
-    table.insert(mEntities, entity)
-    entity = Entity(Assets.Graphics.Sprites.box, 400, 100, 64, 64)
+    table.insert(mEntities, avatar)
+    local entity = Entity(Assets.Graphics.Sprites.box, 400, 100, 64, 64)
     table.insert(mEntities, entity)
 end
 
