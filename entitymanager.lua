@@ -40,6 +40,19 @@ function EntityManager:GetEntities()
     return(self.entities)
 end
 
+function EntityManager:GetEntitiesByTypes(objectTypes)
+	local entities = {}
+	for i,entity in ipairs(self.entities) do
+		for j,objectType in ipairs(objectTypes) do
+			if entity:is(objectType) then
+				table.insert(entities, entity)
+				break
+			end
+		end
+	end
+	return(entities)
+end
+
 function EntityManager:GetEntitiesByTags(tags)
 	local entities = {}
 	for i,entity in ipairs(self.entities) do
