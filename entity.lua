@@ -17,6 +17,8 @@ function Entity:new(sprite, x, y)
     self.spriteWidthRatio = 1.0
     self.spriteHeightRatio = 1.0
     self.debugPhysics = false
+    self.layer = 0
+    self.tag = 'entity'
 end
 
 function Entity:update(dt)

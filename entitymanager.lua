@@ -39,3 +39,16 @@ end
 function EntityManager:GetEntities()
     return(self.entities)
 end
+
+function EntityManager:GetEntitiesByTags(tags)
+	local entities = {}
+	for i,entity in ipairs(self.entities) do
+		for j,tag in ipairs(tags) do
+			if entity.tag == tag then
+				table.insert(entities, entity)
+				break
+			end
+		end
+	end
+	return(entities)
+end

@@ -14,6 +14,7 @@ function Sheep:new(x, y)
     self:SetSpriteSizeFromPhysics()
     self.debugPhysics = true
 
+    self.tag = 'sheep'
     self.baseSpeed = 50
     self.idleTime = math.random(MIN_IDLE_TIME, MAX_IDLE_TIME)
     self.idleTimer = self.idleTime
