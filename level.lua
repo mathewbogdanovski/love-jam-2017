@@ -62,6 +62,10 @@ function Level:Load()
                 currCol = currCol + 1
         end
     end
+
+    mEntityManager:CreateWolf(300, 300)
+
+    mPhysicsWorld:setCallbacks(BeginContact, EndContact, PreSolve, PostSolve)
 end
 
 function Level:GetEntityManager()
@@ -70,4 +74,55 @@ end
 
 function Level:SetStageNum(stageNum)
     self.stage = stageNum
+end
+
+local function GetEntitiesByFixtures(a, b)
+	local entities = mEntityManager:GetEntities()
+	local entityA, entityB = nil, nil
+	for i=1,#entities do
+		if entities[i].physics ~= nil then
+			if entities[i].physics.fixture == a then
+				entityA = entities[i]
+			elseif entities[i].physics.fixture == b then
+				entityB = entities[i]
+			end
+		end
+		if entityA ~= nil and entityB ~= nil then
+			return entityA, entityB
+		end
+	end
+end
+
+local function KillEntityByFixture(fixture, tag)
+	local entities = mEntityManager:GetEntitiesByTags({ tag })
+	for i=1,#entities do
+		if not entities[i]:IsKilled() and entities[i].physics.fixture == fixture then
+			entities[i]:Kill()
+			break
+		end
+	end
+end
+
+function BeginContact(a, b, coll)
+	local aTag = a:getUserData()
+	local bTag = b:getUserData()
+	if aTag ~= bTag then
+		if aTag == 'sheep' and bTag == 'enemy' then
+			KillEntityByFixture(a, aTag)
+		elseif aTag == 'enemy' and bTag == 'sheep' then
+			KillEntityByFixture(b, bTag)
+		end
+	end
+end
+ 
+function EndContact(a, b, coll)
+ 
+end
+ 
+function PreSolve(a, b, coll)
+ 
+end
+ 
+function PostSolve(a, b, coll, normalimpulse, tangentimpulse)
+ 
 end

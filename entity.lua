@@ -119,6 +119,10 @@ function Entity:GetLayer()
     return(self.layer)
 end
 
+function Entity:GetTag()
+    return(self.tag)
+end
+
 function Entity:RegisterPhysics(w, h, type)
     self.physics = {}
     self.physics.body = love.physics.newBody(mPhysicsWorld, self.position.x, self.position.y, type) -- types: "dynamic" "kinematic" "static"
@@ -135,6 +139,7 @@ function Entity:UpdatePhysics()
         self.physics.fixture:destroy()
     end
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape, 1)
+    self.physics.fixture:setUserData(self.tag)
 end
 
 function Entity:SetPhysicsSize(w, h)

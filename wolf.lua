@@ -1,16 +1,16 @@
 require "avatar"
 
-Sheep = Avatar:extend()
+Wolf = Avatar:extend()
 
 local MAXIMUM_PLAYER_DISTANCE_SQUARED = 10000
 local MIN_IDLE_TIME = 1
 local MAX_IDLE_TIME = 3
 
-function Sheep:new(x, y)
-    Sheep.super.new(self, Assets.Graphics.Sheep, x, y)
-    self:SetFaction(GC_FACTIONS.PLAYER)
+function Wolf:new(x, y)
+    Wolf.super.new(self, Assets.Graphics.Sprites.box, x, y)
+    self:SetFaction(GC_FACTIONS.WILD)
     self.layer = 1
-    self.tag = 'sheep'
+    self.tag = 'enemy'
 
     self:RegisterPhysics(64, 64, "dynamic")
     self:SetSpriteSizeFromPhysics()
@@ -23,14 +23,14 @@ function Sheep:new(x, y)
     self.killedSprite = Assets.Graphics.SheepDead
 end
 
-function Sheep:Kill()
+function Wolf:Kill()
     self.super.Kill(self)
     self:SetSpriteVerticalMirror(true)
     self:SetLayer(0)
 end
 
-function Sheep:update(dt)
-    Sheep.super.update(self, dt)
+function Wolf:update(dt)
+    Wolf.super.update(self, dt)
 
     if self:IsKilled() then
         return

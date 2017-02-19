@@ -3,6 +3,7 @@ EntityManager = Object:extend()
 gSort_Entities_Callback = false
 
 require "sheep"
+require "wolf"
 
 function EntityManager:new()
     self.entities = {}
@@ -37,6 +38,11 @@ end
 function EntityManager:CreateSheep(x, y)
     local sheep = Sheep(x, y)
     return self:AddEntity(sheep)
+end
+
+function EntityManager:CreateWolf(x, y)
+	local wolf = Wolf(x, y)
+	return self:AddEntity(wolf)
 end
 
 function EntityManager:AddEntity(entity)
@@ -74,7 +80,7 @@ function EntityManager:GetEntitiesByTags(tags)
     local entities = {}
     for i,entity in ipairs(self.entities) do
         for j,tag in ipairs(tags) do
-            if entity.tag == tag then
+            if entity:GetTag() == tag then
                 table.insert(entities, entity)
                 break
             end
