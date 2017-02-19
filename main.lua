@@ -7,7 +7,8 @@ Object = require "Libraries.classic.classic"
 require "level"
 
 Assets = require("Libraries.cargo.cargo").init("Assets")
-Gamestate = require "Libraries.hump.gamestate"
+
+local Gamestate = require "Libraries.hump.gamestate"
 
 --States--
 local mMenuState = {}
@@ -66,7 +67,9 @@ local function loadMainMenu()
     buttonA:setAnchor(0, 0)
 
     buttonA.events:on(UI_CLICK, function()
-        mLevel = Level(1)
+        mLevel = Level()
+        mLevel:SetStageNum(1)
+        mLevel:Load()
         Gamestate.switch(mGameState)
     end, buttonA)
 

@@ -2,8 +2,6 @@ require "gameConstants"
 
 Entity = Object:extend()
 
-MIN_SCALE = 0.05
-
 function Entity:new(sprite, x, y)
     self.position = Vector(x, y)
     self.rotation = 0
