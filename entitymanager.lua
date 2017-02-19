@@ -35,3 +35,7 @@ function EntityManager:AddEntity(entity)
     table.insert(self.entities, entity)
     return entity
 end
+
+function EntityManager:GetEntities()
+    return(self.entities)
+end

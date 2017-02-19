@@ -8,6 +8,7 @@ function Entity:new(sprite, x, y)
     self.position = Vector(x, y)
     self.rotation = 0
     self.sprite = sprite
+    self.currentSprite = self.sprite
     self.mirrorSpriteHorizontal = 1.0
     self.mirrorSpriteVertical = 1.0
     self.visible = true
@@ -28,7 +29,7 @@ end
 
 function Entity:draw()
     if self.visible == true and self.scale > MIN_SCALE then
-        love.graphics.draw(self.sprite,
+        love.graphics.draw(self.currentSprite,
                             self.position.x,
                             self.position.y,
                             self.rotation,
@@ -156,7 +157,13 @@ function Entity:SetPhysicsSizeFromSprite()
     end
 end
 
-
+function Entity:RemovePhysics()
+    if self:HasPhysics() then
+        self.physics.fixture:destroy()
+        self.physics.body:destroy()
+        self.physics = nil
+    end
+end
 
 function Entity:HasPhysics()
     return(self.physics ~= nil)

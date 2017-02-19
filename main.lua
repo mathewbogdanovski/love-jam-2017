@@ -196,7 +196,7 @@ local function loadPauseMenu()
     buttonA:setAnchor(0, 0)
 
     buttonA.events:on(UI_CLICK, function()
-    	Gamestate.switch(mMenuState)
+        Gamestate.switch(mMenuState)
     end, buttonA)
 
     content:addChild(buttonA)

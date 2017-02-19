@@ -8,6 +8,7 @@ function Level:new(stageNum)
     mEntityManager = EntityManager()
     self.stage = stageNum
     self:load()
+    self.timeElapsed = 0
 end
 
 function Level:draw()
@@ -16,6 +17,12 @@ end
 
 function Level:update(dt)
     mEntityManager:update(dt)
+
+    self.timeElapsed = (self.timeElapsed + dt)
+
+    if self.timeElapsed > 5 then
+        mEntityManager:GetEntities()[1]:Kill()
+    end
 end
 
 function Level:load()

@@ -9,12 +9,13 @@ function Avatar:new(image, x, y)
     self.faction = GC_FACTIONS.NONE
     self.speedMultiplier = 1.0
     self.baseSpeed = 5
+    self.killedSprite = nil
 end
 
 function Avatar:SetHealth(health)
     self.health = health
     if health <= 0 then
-        self.killed = true
+        self:Kill()
     end
 end
 
@@ -24,6 +25,12 @@ end
 
 function Avatar:Kill()
     self.health = 0
+    self.killed = true
+
+    if self.killedSprite ~= nil then
+        self.currentSprite = self.killedSprite
+    end
+    self:RemovePhysics()
 end
 
 function Avatar:IsKilled()
