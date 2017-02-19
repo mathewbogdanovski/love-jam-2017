@@ -60,6 +60,8 @@ function Level:Load()
     self.levelLoaded = true
     self.remainingSheep = math.min(self.remainingSheep + 10, MAX_NUM_SHEEP)
 
+
+    --sheep
     local xOffset = 50
     local yOffset = 50
     local spawnWidth = 300
@@ -85,11 +87,12 @@ function Level:Load()
 
     self.remainingSheep = 0
 
+    --enemies
     mEntityManager:CreateWolf(1600, 750)
     mEntityManager:CreateWolf(1600, 850)
     mEntityManager:CreateWolf(1600, 950)
 
-    --temp walls
+    --walls
     mEntityManager:CreateEmptyEntity(860, 0, true, 1920, 1)
     mEntityManager:CreateEmptyEntity(860, 1080, true, 1920, 1)
     mEntityManager:CreateEmptyEntity(0, 540, true, 1, 1080)
