@@ -44,6 +44,14 @@ function EntityManager:AddEntity(entity)
     return entity
 end
 
+function EntityManager:RemoveEntity(entity)
+end
+
+function EntityManager:RemoveAllEntities()
+    for i=#self.entities,1 do
+    end
+end
+
 function SortEntityLayers(a,b)
   return(a:GetLayer() < b:GetLayer())
 end

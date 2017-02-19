@@ -11,6 +11,7 @@ function Level:new()
     self.levelLoaded = false
     self.timeElapsed = 0
     self.remainingSheep = 10
+    self.savedSheep = 0
 end
 
 function Level:draw()
@@ -32,8 +33,11 @@ function Level:update(dt)
 end
 
 function Level:Load()
+	mEntityManager:RemoveAllEntities()
+
     self.levelLoaded = true
     self.remainingSheep = math.min(self.remainingSheep + 10, MAX_NUM_SHEEP)
+    self.savedSheep = 0
 
     --TODO: temp way of creating spawning bounds
     local xOffset = 50
@@ -76,6 +80,38 @@ end
 
 function Level:SetStageNum(stageNum)
     self.stage = stageNum
+end
+
+function Level:GetStageNum()
+	return(self.stage)
+end
+
+function Level:CheckWinState()
+	local roundOver = true
+	local sheep = mEntityManager:GetEntitiesByTypes({ Sheep })
+	for i=1,#sheep do
+		if sheep[i] ~= nil and not sheep[i]:IsKilled() then
+			roundOver = false
+			break
+		end
+	end
+
+	if roundOver == true then
+		if self.savedSheep > 0 then
+			self:OnRoundWin()
+		else
+			self:OnGameOver()
+		end
+	end
+end
+
+function Level:OnRoundWin()
+	Level:SetStageNum(Level:GetStageNum() + 1)
+	Level:Load()
+end
+
+function Level:OnGameOver()
+
 end
 
 local function GetEntitiesByFixtures(a, b)
