@@ -12,6 +12,7 @@ function Sheep:new(x, y)
 
     self:RegisterPhysics(64, 64, "dynamic")
     self:SetSpriteSizeFromPhysics()
+    self.physics.body:setFixedRotation(true)
     self.debugPhysics = true
 
     self.layer = 1
