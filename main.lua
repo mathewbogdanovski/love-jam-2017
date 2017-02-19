@@ -2,7 +2,7 @@
 require "catui"
 Vector = require "Libraries.hump.vector"
 
-Level = nil
+mLevel = nil
 Object = require "Libraries.classic.classic"
 require "level"
 
@@ -72,6 +72,9 @@ local function loadMainMenu()
     buttonA:setAnchor(0, 0)
 
     buttonA.events:on(UI_CLICK, function()
+        if mLevel ~= nil then
+            mLevel:Destroy()
+        end
         mLevel = Level()
         mLevel:SetStageNum(1)
         mLevel:Load()
@@ -186,6 +189,15 @@ end
 
 function mGameState:textinput(text)
     mUIManager:textInput(text)
+end
+
+CheckWinState = function()
+    if mLevel:CheckWinState() == true then
+        if mLevel:EndRound() == true then
+        else
+            Gamestate.switch(mMenuState)
+        end
+    end
 end
 
 --------------- PAUSE STATE ---------------

@@ -45,7 +45,7 @@ function EntityManager:AddEntity(entity)
 end
 
 function EntityManager:RemoveEntity(entity)
-    for i=#self.entities,1 do
+    for i=#self.entities,1,-1 do
         if entity == self.entities[i] then
             table.remove(self.entities, i)
             break
@@ -54,7 +54,7 @@ function EntityManager:RemoveEntity(entity)
 end
 
 function EntityManager:RemoveAllEntities()
-    for i=#self.entities,1 do
+    for i=#self.entities,1,-1 do
         if self.entities[i] ~= nil then
             self.entities[i]:RemovePhysics()
             table.remove(self.entities, i)

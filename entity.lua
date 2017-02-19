@@ -98,7 +98,7 @@ end
 
 function Entity:SetLayer(layer)
     self.layer = layer
-    Level:GetEntityManager():SortEntities()
+    mLevel:GetEntityManager():SortEntities()
 end
 
 function Entity:GetLayer()

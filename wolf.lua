@@ -32,7 +32,7 @@ function Wolf:update(dt)
     end
 
     if self.target == nil or self.target:IsKilled() then
-        local sheep = Level:GetEntityManager():GetEntitiesByTypes({ Sheep })
+        local sheep = mLevel:GetEntityManager():GetEntitiesByTypes({ Sheep })
         local closestSheep = nil
         local closestDist = 0
         for i=1,#sheep do

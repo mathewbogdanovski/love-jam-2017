@@ -3,6 +3,7 @@ Level = Object:extend()
 require "entitymanager"
 
 local mEntityManager = nil
+local mCheckWinState = false
 
 function Level:new()
     mEntityManager = EntityManager()
@@ -11,7 +12,6 @@ function Level:new()
     self.levelLoaded = false
     self.timeElapsed = 0
     self.remainingSheep = 10
-    self.savedSheep = 0
 end
 
 function Level:draw()
@@ -30,6 +30,28 @@ function Level:update(dt)
     mEntityManager:update(dt)
 
     self.timeElapsed = (self.timeElapsed + dt)
+
+	local sheep = mEntityManager:GetEntitiesByTypes({ Sheep })
+	for i=1,#sheep do
+		if sheep[i] ~= nil and not sheep[i]:IsKilled() then
+			local sheepPos = sheep[i]:GetPosition()
+			if sheepPos.x > WORLD_MAX_X then
+				sheep[i]:Kill()
+				mEntityManager:RemoveEntity(sheep[i])
+				self.remainingSheep = self.remainingSheep + 1
+				mCheckWinState = true
+			elseif sheepPos.x < 0 or sheepPos.y > WORLD_MAX_Y or sheepPos.y < 0 then
+				sheep[i]:Kill()
+				mEntityManager:RemoveEntity(sheep[i])
+				mCheckWinState = true
+			end
+		end
+	end
+
+	if mCheckWinState == true then
+		CheckWinState()
+		mCheckWinState = false
+	end
 end
 
 function Level:Load()
@@ -37,7 +59,6 @@ function Level:Load()
 
     self.levelLoaded = true
     self.remainingSheep = math.min(self.remainingSheep + 10, MAX_NUM_SHEEP)
-    self.savedSheep = 0
 
     local xOffset = 50
     local yOffset = 50
@@ -62,9 +83,15 @@ function Level:Load()
         end
     end
 
-    mEntityManager:CreateWolf(500, 500)
+    self.remainingSheep = 0
+
+    mEntityManager:CreateWolf(1600, 850)
 
     mPhysicsWorld:setCallbacks(BeginContact, EndContact, PreSolve, PostSolve)
+end
+
+function Level:Destroy()
+	mEntityManager:RemoveAllEntities()
 end
 
 function Level:GetEntityManager()
@@ -81,6 +108,7 @@ end
 
 function Level:CheckWinState()
 	local roundOver = true
+
 	local sheep = mEntityManager:GetEntitiesByTypes({ Sheep })
 	for i=1,#sheep do
 		if sheep[i] ~= nil and not sheep[i]:IsKilled() then
@@ -89,18 +117,22 @@ function Level:CheckWinState()
 		end
 	end
 
-	if roundOver == true then
-		if self.savedSheep > 0 then
-			self:OnRoundWin()
-		else
-			self:OnGameOver()
-		end
+	return(roundOver)
+end
+
+function Level:EndRound()
+	if self.remainingSheep > 0 then
+		self:OnRoundWin()
+		return true
+	else
+		self:OnGameOver()
+		return false
 	end
 end
 
 function Level:OnRoundWin()
-	Level:SetStageNum(Level:GetStageNum() + 1)
-	Level:Load()
+	self:SetStageNum(self:GetStageNum() + 1)
+	self:Load()
 end
 
 function Level:OnGameOver()
@@ -140,8 +172,10 @@ function BeginContact(a, b, coll)
 	if aTag ~= bTag then
 		if aTag == 'sheep' and bTag == 'enemy' then
 			KillEntityByFixture(a, aTag)
+			mCheckWinState = true
 		elseif aTag == 'enemy' and bTag == 'sheep' then
 			KillEntityByFixture(b, bTag)
+			mCheckWinState = true
 		end
 	end
 end
