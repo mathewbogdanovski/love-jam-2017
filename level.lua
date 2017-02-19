@@ -175,12 +175,14 @@ local function GetEntitiesByFixtures(a, b)
 end
 
 function BeginContact(a, b, coll)
-	local entityA, entityB = GetEntitiesByFixtures(a, b)
-	if entityA ~= nil and entityA:is(Avatar) and entityB ~= nil and entityB:is(Avatar) then
-		if entityA:GetFaction() ~= entityB:GetFaction() then
-			entityA:Attack(entityB)
-			entityB:Attack(entityA)
-			mCheckWinState = true
+	if a:getUserData() ~= b:getUserData() then
+		local entityA, entityB = GetEntitiesByFixtures(a, b)
+		if entityA ~= nil and entityA:is(Avatar) and entityB ~= nil and entityB:is(Avatar) then
+			if entityA:GetFaction() ~= entityB:GetFaction() then
+				entityA:Attack(entityB)
+				entityB:Attack(entityA)
+				mCheckWinState = true
+			end
 		end
 	end
 end
