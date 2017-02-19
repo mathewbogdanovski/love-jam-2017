@@ -20,7 +20,7 @@ function Entity:new(sprite, x, y)
 end
 
 function Entity:update(dt)
-    if self.physics ~= nil then
+    if self:HasPhysics() then
         self.position.x = self.physics.body:getX() * PHYSICS_TO_WORLD_X
         self.position.y = self.physics.body:getY() * PHYSICS_TO_WORLD_Y
         self.rotation = self.physics.body:getAngle()
@@ -38,7 +38,7 @@ function Entity:draw()
                             self.sprite:getWidth() / 2, 
                             self.sprite:getHeight() / 2)
 
-        if self.physics ~= nil and self.debugPhysics == true then
+        if self:HasPhysics() and self.debugPhysics == true then
             love.graphics.push()
                 love.graphics.translate(self.position.x, self.position.y)
                 love.graphics.rotate(self.rotation)
@@ -54,7 +54,7 @@ end
 
 function Entity:SetPosition(position)
     self.position = position
-    if physics ~= nil then
+    if self:HasPhysics() then
         self.physics.body:setPosition(position)
     end
 end
@@ -65,7 +65,7 @@ end
 
 function Entity:SetRotation(rotation)
     self.rotation = rotation % (2 * math.pi)
-    if physics ~= nil then
+    if self:HasPhysics() then
         self.physics.body:setAngle(self.rotation)
     end
 end
@@ -80,7 +80,7 @@ function Entity:SetScale(scale)
     end
     self.scale = scale
 
-    if self.physics ~= nil then
+    if self:HasPhysics() then
         self:UpdatePhysics()
     end
 end
@@ -129,7 +129,8 @@ function Entity:UpdatePhysics()
 end
 
 function Entity:SetPhysicsSize(w, h)
-    if self.physics ~= nil then
+    if self:HasPhysics()
+     then
         self.physics.width = w
         self.physics.height = h
         self:UpdatePhysics()
@@ -139,7 +140,7 @@ function Entity:SetPhysicsSize(w, h)
 end
 
 function Entity:SetSpriteSizeFromPhysics()
-    if self.physics ~= nil then
+    if self:HasPhysics() then
         self.spriteWidthRatio = self.sprite and (self.physics.width * PHYSICS_TO_WORLD_X / self.sprite:getWidth()) or 1.0
         self.spriteHeightRatio = self.sprite and (self.physics.height * PHYSICS_TO_WORLD_Y / self.sprite:getHeight()) or 1.0
     else
@@ -148,7 +149,7 @@ function Entity:SetSpriteSizeFromPhysics()
 end
 
 function Entity:SetPhysicsSizeFromSprite()
-    if self.physics ~= nil then
+    if self:HasPhysics() then
         self.physics.width = self.spriteWidthRatio * self.sprite:getWidth() / love.graphics.getWidth() * WORLD_MAX_X
         self.physics.height = self.spriteHeightRatio * self.sprite:getHeight() / love.graphics.getHeight() * WORLD_MAX_Y
         self:UpdatePhysics()
@@ -170,7 +171,7 @@ function Entity:HasPhysics()
 end
 
 function Entity:SetVelocity(velocity)
-    if self.physics ~= nil then
+    if self:HasPhysics() then
         self.physics.body:setLinearVelocity(velocity.x, velocity.y)
     else
         print('BAD: Trying to move an entity with no physics')
@@ -178,11 +179,10 @@ function Entity:SetVelocity(velocity)
 end
 
 function Entity:GetVelocity()
-    if self.physics == nil then
-        return(Vector(0,0))
-    else
+    if self:HasPhysics() then
         return(Vector(self.physics.body:getLinearVelocity()))
     end
+    return(Vector(0,0))
 end
 
 function Entity:SetSpriteHorizontalMirror(mirrored)
