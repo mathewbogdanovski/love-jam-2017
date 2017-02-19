@@ -13,7 +13,6 @@ function Sheep:new(x, y)
     self.tag = 'sheep'
 
     self:RegisterPhysics(50, 50, "dynamic")
-    self:SetSpriteSizeFromPhysics()
     self.physics.body:setFixedRotation(true)
     self.debugPhysics = true
 
@@ -36,7 +35,7 @@ function Sheep:update(dt)
         return
     end
 
-    local mousePosition = Vector(love.mouse:getX(), love.mouse:getY())
+    local mousePosition = Vector(love.mouse:getX() / gWorldToScreenX, love.mouse:getY() / gWorldToScreenY)
     local distanceVector = self.position - mousePosition
     local distance = distanceVector:len()
     if distance <= MAXIMUM_PLAYER_DISTANCE_SQUARED then

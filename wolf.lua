@@ -11,7 +11,6 @@ function Wolf:new(x, y)
     self.tag = 'enemy'
 
     self:RegisterPhysics(64, 64, "dynamic")
-    self:SetSpriteSizeFromPhysics()
     self.physics.body:setFixedRotation(true)
     self.debugPhysics = true
 

@@ -10,6 +10,10 @@ Assets = require("Libraries.cargo.cargo").init("Assets")
 
 local Gamestate = require "Libraries.hump.gamestate"
 
+--Screen to world scale--
+gWorldToScreenX = 1.0
+gWorldToScreenY = 1.0
+
 --States--
 local mMenuState = {}
 local mGameState = {}
@@ -18,7 +22,11 @@ local mPauseState = {}
 local function initWindow()
     love.window.setTitle("Game name")
     love.window.setIcon(love.image.newImageData("Assets/Graphics/Sheep.png"))
+    love.window.setMode(1920, 1080, { resizable=true, minwidth=400, minheight=300})
     love.graphics.setBackgroundColor(0, 100, 0, 255)
+
+    gWorldToScreenX = love.graphics.getWidth() / WORLD_MAX_X
+    gWorldToScreenY = love.graphics.getHeight() / WORLD_MAX_Y
 end
 
 function love.load()
@@ -44,8 +52,8 @@ function love.update(dt)
 end
 
 function love.resize(w, h)
-    PHYSICS_TO_WORLD_X = w / WORLD_MAX_X
-    PHYSICS_TO_WORLD_Y = h / WORLD_MAX_Y
+    gWorldToScreenX = w / WORLD_MAX_X
+    gWorldToScreenY = h / WORLD_MAX_Y
 end
 
 --------------- MENU STATE ---------------

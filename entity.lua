@@ -12,8 +12,6 @@ function Entity:new(sprite, x, y)
     self.visible = true
     self.physics = nil
     self.scale = 1.0
-    self.spriteWidthRatio = 1.0
-    self.spriteHeightRatio = 1.0
     self.debugPhysics = false
     self.layer = 0
     self.tag = 'entity'
@@ -21,8 +19,8 @@ end
 
 function Entity:update(dt)
     if self:HasPhysics() then
-        self.position.x = self.physics.body:getX() * PHYSICS_TO_WORLD_X
-        self.position.y = self.physics.body:getY() * PHYSICS_TO_WORLD_Y
+        self.position.x = self.physics.body:getX()
+        self.position.y = self.physics.body:getY()
         self.rotation = self.physics.body:getAngle()
     end
 end
@@ -30,23 +28,24 @@ end
 function Entity:draw()
     if self.visible == true and self.scale > MIN_SCALE then
         love.graphics.draw(self.currentSprite,
-                            self.position.x,
-                            self.position.y,
+                            self.position.x * gWorldToScreenX,
+                            self.position.y * gWorldToScreenY,
                             self.rotation,
-                            self.spriteWidthRatio * self.scale * self.mirrorSpriteHorizontal,
-                            self.spriteHeightRatio * self.scale * self.mirrorSpriteVertical,
-                            self.sprite:getWidth() / 2, 
-                            self.sprite:getHeight() / 2)
+                            self.scale * self.mirrorSpriteHorizontal * gWorldToScreenX,
+                            self.scale * self.mirrorSpriteVertical * gWorldToScreenY,
+                            self.scale * (self.currentSprite:getWidth() / 2) * gWorldToScreenX, 
+                            self.scale * (self.currentSprite:getHeight() / 2) * gWorldToScreenY)
 
         if self:HasPhysics() and self.debugPhysics == true then
             love.graphics.push()
-                love.graphics.translate(self.position.x, self.position.y)
+                love.graphics.translate(self.position.x * gWorldToScreenX,
+                                         self.position.y * gWorldToScreenY)
                 love.graphics.rotate(self.rotation)
                 love.graphics.rectangle("line", 
-                                          -self.physics.width / 2 * self.scale * PHYSICS_TO_WORLD_X, 
-                                          -self.physics.height / 2 * self.scale * PHYSICS_TO_WORLD_Y, 
-                                          self.physics.width * self.scale * PHYSICS_TO_WORLD_X, 
-                                          self.physics.height * self.scale * PHYSICS_TO_WORLD_Y)
+                                          -self.physics.width / 2 * self.scale * gWorldToScreenX, 
+                                          -self.physics.height / 2 * self.scale * gWorldToScreenY, 
+                                          self.physics.width * self.scale * gWorldToScreenX, 
+                                          self.physics.height * self.scale * gWorldToScreenY)
             love.graphics.pop()
         end
     end
@@ -87,19 +86,6 @@ end
 
 function Entity:GetScale()
     return(self.scale)
-end
-
-function Entity:SetSpriteSize(w, h)
-    self.spriteWidthRatio = self.sprite and (w / self.sprite:getWidth()) or 1.0
-    self.spriteHeightRatio = self.sprite and (h / self.sprite:getHeight()) or 1.0
-end
-
-function Entity:GetSpriteSize()
-    return(Vector(self.spriteWidthRatio * self.sprite:getWidth(), self.spriteHeightRatio * self.sprite:getHeight()))
-end
-
-function Entity:GetScaledSpriteSize()
-    return(self:GetSpriteSize() * self.scale)
 end
 
 function Entity:SetVisible(visible)
@@ -147,25 +133,6 @@ function Entity:SetPhysicsSize(w, h)
      then
         self.physics.width = w
         self.physics.height = h
-        self:UpdatePhysics()
-    else
-        print('Tried to set physics size on an entity with no physics')
-    end
-end
-
-function Entity:SetSpriteSizeFromPhysics()
-    if self:HasPhysics() then
-        self.spriteWidthRatio = self.currentSprite and (self.physics.width * PHYSICS_TO_WORLD_X / self.sprite:getWidth()) or 1.0
-        self.spriteHeightRatio = self.currentSprite and (self.physics.height * PHYSICS_TO_WORLD_Y / self.sprite:getHeight()) or 1.0
-    else
-        print('Tried to set sprite size from physics on an entity with no physics')
-    end
-end
-
-function Entity:SetPhysicsSizeFromSprite()
-    if self:HasPhysics() then
-        self.physics.width = self.spriteWidthRatio * self.sprite:getWidth() / love.graphics.getWidth() * WORLD_MAX_X
-        self.physics.height = self.spriteHeightRatio * self.sprite:getHeight() / love.graphics.getHeight() * WORLD_MAX_Y
         self:UpdatePhysics()
     else
         print('Tried to set physics size on an entity with no physics')
