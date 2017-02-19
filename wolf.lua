@@ -53,7 +53,7 @@ function Wolf:update(dt)
         self:MoveInDirection(distanceVector:normalized())
     end
 
-    local mousePosition = Vector(love.mouse:getX(), love.mouse:getY())
+    local mousePosition = Vector(love.mouse:getX() / gWorldToScreenX, love.mouse:getY() / gWorldToScreenY)
     local distanceVector = self.position - mousePosition
     local distance = distanceVector:len()
     if distance <= MAXIMUM_PLAYER_DISTANCE_SQUARED then
