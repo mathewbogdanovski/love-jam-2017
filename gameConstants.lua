@@ -1,4 +1,4 @@
-WORLD_MAX_X, WORLD_MAX_Y = love.graphics.getDimensions()
+WORLD_MAX_X, WORLD_MAX_Y = 800, 600
 PHYSICS_TO_WORLD_X = love.graphics.getWidth() / WORLD_MAX_X
 PHYSICS_TO_WORLD_Y = love.graphics.getHeight() / WORLD_MAX_Y
 

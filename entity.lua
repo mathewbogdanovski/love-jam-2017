@@ -150,8 +150,8 @@ end
 
 function Entity:SetSpriteSizeFromPhysics()
     if self:HasPhysics() then
-        self.spriteWidthRatio = self.sprite and (self.physics.width * PHYSICS_TO_WORLD_X / self.sprite:getWidth()) or 1.0
-        self.spriteHeightRatio = self.sprite and (self.physics.height * PHYSICS_TO_WORLD_Y / self.sprite:getHeight()) or 1.0
+        self.spriteWidthRatio = self.currentSprite and (self.physics.width * PHYSICS_TO_WORLD_X / self.sprite:getWidth()) or 1.0
+        self.spriteHeightRatio = self.currentSprite and (self.physics.height * PHYSICS_TO_WORLD_Y / self.sprite:getHeight()) or 1.0
     else
         print('Tried to set sprite size from physics on an entity with no physics')
     end

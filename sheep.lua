@@ -38,7 +38,9 @@ function Sheep:update(dt)
 
     local mousePosition = Vector(love.mouse:getX(), love.mouse:getY())
     local distanceVector = self.position - mousePosition
-    if distanceVector:len2() <= MAXIMUM_PLAYER_DISTANCE_SQUARED then
+    local distance = distanceVector:len()
+    if distance <= MAXIMUM_PLAYER_DISTANCE_SQUARED then
+        self:SetSpeedMultiplier(100 / distance)
         self:MoveInDirection(distanceVector:normalized())
     else
         self.idleTimer = self.idleTimer + dt
@@ -50,6 +52,7 @@ function Sheep:update(dt)
                 newDirection = Vector(math.random(-100, 100), math.random(-100, 100))
                 newDirection = newDirection:normalized()
             end
+            self:SetSpeedMultiplier(1)
             self:MoveInDirection(newDirection)
         end
     end
