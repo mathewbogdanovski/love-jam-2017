@@ -165,7 +165,7 @@ end
 local mScoreLabel = nil
 
 local function loadGameUI()
-    mScoreLabel = UILabel:new("Assets/Fonts/expressway rg.ttf", "Score: " .. 0, 24)
+    mScoreLabel = UILabel:new("Assets/Fonts/expressway rg.ttf", "Score: " .. mLevel:GetScore(), 24)
     mScoreLabel:setAnchor(0, 0)
     mScoreLabel:setSize(100, 100)
     mScoreLabel:setAutoSize(false)
@@ -243,15 +243,28 @@ local function loadPauseMenu()
 
     local buttonA = UIButton:new()
     buttonA:setPos(10, 10)
-    buttonA:setText("MAIN MENU")
-    --buttonA:setIcon("Assets/Graphics/Sprites/box.png")
+    buttonA:setSize(100, 35)
+    buttonA:setText("RESUME GAME")
     buttonA:setAnchor(0, 0)
 
     buttonA.events:on(UI_CLICK, function()
-        Gamestate.switch(mMenuState)
+        Gamestate.pop(mPauseState)
+        Gamestate.switch(mGameState)
     end, buttonA)
 
     content:addChild(buttonA)
+
+    local buttonB = UIButton:new()
+    buttonB:setPos(10, 50)
+    buttonB:setSize(100, 35)
+    buttonB:setText("MAIN MENU")
+    buttonB:setAnchor(0, 0)
+
+    buttonB.events:on(UI_CLICK, function()
+        Gamestate.switch(mMenuState)
+    end, buttonB)
+
+    content:addChild(buttonB)
 end
 
 function mPauseState:enter()
