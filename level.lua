@@ -85,7 +85,9 @@ function Level:Load()
 
     self.remainingSheep = 0
 
+    mEntityManager:CreateWolf(1600, 750)
     mEntityManager:CreateWolf(1600, 850)
+    mEntityManager:CreateWolf(1600, 950)
 
     mPhysicsWorld:setCallbacks(BeginContact, EndContact, PreSolve, PostSolve)
 end

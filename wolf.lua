@@ -3,6 +3,8 @@ require "avatar"
 Wolf = Avatar:extend()
 
 local MAXIMUM_PLAYER_DISTANCE_SQUARED = 100
+local TARGET_SEARCH_INTERVAL = 4
+local IDLE_AFTER_KILL_TIME = 6
 
 function Wolf:new(x, y)
     Wolf.super.new(self, Assets.Graphics.Sprites.box, x, y)
@@ -14,8 +16,11 @@ function Wolf:new(x, y)
     self.physics.body:setFixedRotation(true)
     self.debugPhysics = true
 
-    self.baseSpeed = 50
+    self.baseSpeed = 35
     self.killedSprite = Assets.Graphics.SheepDead
+
+    self.targetTimer = 0
+    self.idleTimer = 0
 end
 
 function Wolf:Kill()
@@ -31,7 +36,19 @@ function Wolf:update(dt)
         return
     end
 
-    if self.target == nil or self.target:IsKilled() then
+    if self.target ~= nil and self.target:IsKilled() then
+        self:MoveInDirection(Vector(0,0))
+        self.idleTimer = self.idleTimer + dt
+        if self.idleTimer >= IDLE_AFTER_KILL_TIME then
+            self.idleTimer = 0
+            self.target = nil
+        end
+    end
+
+    self.targetTimer = self.targetTimer + dt
+
+    if self.target == nil or (self.targetTimer >= TARGET_SEARCH_INTERVAL and self.target ~= nil and not self.target:IsKilled()) then
+        self.targetTimer = 0
         local sheep = mLevel:GetEntityManager():GetEntitiesByTypes({ Sheep })
         local closestSheep = nil
         local closestDist = 0

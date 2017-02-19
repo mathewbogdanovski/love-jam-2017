@@ -47,7 +47,7 @@ function Sheep:update(dt)
             self.idleTimer = 0
             self.idleTime = math.random(MIN_IDLE_TIME, MAX_IDLE_TIME)
             local newDirection = Vector(0, 0)
-            if math.random() < 0.45 then
+            if math.random() < 0.2 then
                 newDirection = Vector(math.random(-100, 100), math.random(-100, 100))
                 newDirection = newDirection:normalized()
             end
