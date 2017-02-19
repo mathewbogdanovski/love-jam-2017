@@ -36,10 +36,12 @@ function Level:Load()
     self.remainingSheep = math.min(self.remainingSheep + 10, MAX_NUM_SHEEP)
 
     --TODO: temp way of creating spawning bounds
+    local xOffset = 50
+    local yOffset = 50
     local spawnBounds = { x1 = 0,
                             x2 = 300,
-                            y1 = 100,
-                            y2 = 600 }
+                            y1 = 0,
+                            y2 = 400 }
 
     local spawnWidth = (spawnBounds.x2 - spawnBounds.x1)
     local spawnHeight = (spawnBounds.y2 - spawnBounds.y1)
@@ -52,8 +54,8 @@ function Level:Load()
     local currCol = 0
     for i = 1, self.remainingSheep do
         mEntityManager:CreateSheep(
-            (currCol * widthIncrement) + widthIncrement / 2, 
-            (currRow * heightIncrement) + heightIncrement / 2)
+            xOffset + (currCol * widthIncrement) + widthIncrement / 2, 
+            yOffset + (currRow * heightIncrement) + heightIncrement / 2)
 
         if currCol >= numColumns then
                 currCol = 0
@@ -63,7 +65,7 @@ function Level:Load()
         end
     end
 
-    mEntityManager:CreateWolf(300, 300)
+    mEntityManager:CreateWolf(500, 500)
 
     mPhysicsWorld:setCallbacks(BeginContact, EndContact, PreSolve, PostSolve)
 end

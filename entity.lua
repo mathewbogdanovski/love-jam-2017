@@ -112,7 +112,7 @@ end
 
 function Entity:SetLayer(layer)
     self.layer = layer
-    gSort_Entities_Callback = true
+    Level:GetEntityManager():SortEntities()
 end
 
 function Entity:GetLayer()

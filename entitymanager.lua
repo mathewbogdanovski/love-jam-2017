@@ -1,7 +1,5 @@
 EntityManager = Object:extend()
 
-gSort_Entities_Callback = false
-
 require "sheep"
 require "wolf"
 
@@ -16,11 +14,6 @@ function EntityManager:draw()
 end
 
 function EntityManager:update(dt)
-	if gSort_Entities_Callback == true then
-		self:SortEntities()
-		gSort_Entities_Callback = false
-	end
-
     for i,entity in ipairs(self.entities) do
         entity:update(dt)
     end

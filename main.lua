@@ -1,8 +1,8 @@
 --! file: main.lua
 require "catui"
-
 Vector = require "Libraries.hump.vector"
 
+Level = nil
 Object = require "Libraries.classic.classic"
 require "level"
 
@@ -14,9 +14,6 @@ local Gamestate = require "Libraries.hump.gamestate"
 local mMenuState = {}
 local mGameState = {}
 local mPauseState = {}
-
---Game Globals--
-local mLevel = nil
 
 local function initWindow()
     love.window.setTitle("Game name")
