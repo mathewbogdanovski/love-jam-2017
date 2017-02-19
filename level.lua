@@ -37,7 +37,6 @@ function Level:update(dt)
 		if sheep[i] ~= nil and not sheep[i]:IsKilled() then
 			local sheepPos = sheep[i]:GetPosition()
 			if sheepPos.x > WORLD_MAX_X then
-				sheep[i]:Kill()
 				mEntityManager:RemoveEntity(sheep[i])
 				self.remainingSheep = self.remainingSheep + 1
 				self.score = self.score + 1
@@ -45,7 +44,6 @@ function Level:update(dt)
 				UpdateScore()
 				mCheckWinState = true
 			elseif sheepPos.x < 0 or sheepPos.y > WORLD_MAX_Y or sheepPos.y < 0 then
-				sheep[i]:Kill()
 				mEntityManager:RemoveEntity(sheep[i])
 				mCheckWinState = true
 			end

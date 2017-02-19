@@ -15,6 +15,7 @@ function Entity:new(sprite, x, y)
     self.debugPhysics = false
     self.layer = 0
     self.tag = 'entity'
+    self.isGarbage = false
 end
 
 function Entity:update(dt)
@@ -49,6 +50,14 @@ function Entity:draw()
             love.graphics.pop()
         end
     end
+end
+
+function Entity:IsGarbage()
+    return(self.isGarbage)
+end
+
+function Entity:MarkAsGarbage()
+    self.isGarbage = true
 end
 
 function Entity:SetPosition(position)

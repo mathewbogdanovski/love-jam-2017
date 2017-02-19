@@ -52,6 +52,8 @@ end
 function EntityManager:RemoveEntity(entity)
     for i=#self.entities,1,-1 do
         if entity == self.entities[i] then
+            self.entities[i]:RemovePhysics()
+            self.entities[i]:MarkAsGarbage()
             table.remove(self.entities, i)
             break
         end
@@ -62,6 +64,7 @@ function EntityManager:RemoveAllEntities()
     for i=#self.entities,1,-1 do
         if self.entities[i] ~= nil then
             self.entities[i]:RemovePhysics()
+            self.entities[i]:MarkAsGarbage()
             table.remove(self.entities, i)
         end
     end

@@ -37,12 +37,16 @@ function Wolf:update(dt)
         return
     end
 
-    if self.target ~= nil and self.target:IsKilled() then
-        self:MoveInDirection(Vector(0,0))
-        self.idleTimer = self.idleTimer + dt
-        if self.idleTimer >= IDLE_AFTER_KILL_TIME then
-            self.idleTimer = 0
+    if self.target ~= nil then
+        if self.target:IsGarbage() then
             self.target = nil
+        elseif self.target:IsKilled() then
+            self:MoveInDirection(Vector(0,0))
+            self.idleTimer = self.idleTimer + dt
+            if self.idleTimer >= IDLE_AFTER_KILL_TIME then
+                self.idleTimer = 0
+                self.target = nil
+            end
         end
     end
 
