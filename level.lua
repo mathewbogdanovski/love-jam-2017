@@ -89,6 +89,11 @@ function Level:Load()
     mEntityManager:CreateWolf(1600, 850)
     mEntityManager:CreateWolf(1600, 950)
 
+    --temp walls
+    mEntityManager:CreateEmptyEntity(860, 0, true, 1920, 1)
+    mEntityManager:CreateEmptyEntity(860, 1080, true, 1920, 1)
+    mEntityManager:CreateEmptyEntity(0, 540, true, 1, 1080)
+
     mPhysicsWorld:setCallbacks(BeginContact, EndContact, PreSolve, PostSolve)
 end
 

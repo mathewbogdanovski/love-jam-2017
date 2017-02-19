@@ -7,7 +7,7 @@ local TARGET_SEARCH_INTERVAL = 4
 local IDLE_AFTER_KILL_TIME = 6
 
 function Wolf:new(x, y)
-    Wolf.super.new(self, Assets.Graphics.Sprites.box, x, y)
+    Wolf.super.new(self, Assets.Graphics.box, x, y)
     self:SetFaction(GC_FACTIONS.WILD)
     self.layer = 1
     self.tag = 'enemy'
@@ -74,7 +74,7 @@ function Wolf:update(dt)
     local distanceVector = self.position - mousePosition
     local distance = distanceVector:len()
     if distance <= MAXIMUM_PLAYER_DISTANCE_SQUARED then
-        self:SetSpeedMultiplier(100 / distance)
+        self:SetSpeedMultiplier(200 / distance)
         self:MoveInDirection(distanceVector:normalized())
     end
 end

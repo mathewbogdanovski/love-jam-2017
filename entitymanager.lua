@@ -19,11 +19,16 @@ function EntityManager:update(dt)
     end
 end
 
-function EntityManager:CreateBoxEntity(x, y, physics)
-    local entity = Entity(Assets.Graphics.Sprites.Box, x, y)
-    if physics then
-        entity:RegisterPhysics(64, 64, "dynamic")
-        entity:SetSpriteSizeFromPhysics()
+function EntityManager:CreateEmptyEntity(x, y, physics, w, h)
+    local entity = Entity(Assets.Graphics.transparent, x, y)
+    if physics == true then
+        if w == nil then
+            w = 64
+        end
+        if h == nil then
+            h = 64
+        end
+        entity:RegisterPhysics(w, h, "static")
     end
     return self:AddEntity(entity)
 end

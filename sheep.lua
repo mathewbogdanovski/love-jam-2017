@@ -39,7 +39,7 @@ function Sheep:update(dt)
     local distanceVector = self.position - mousePosition
     local distance = distanceVector:len()
     if distance <= MAXIMUM_PLAYER_DISTANCE_SQUARED then
-        self:SetSpeedMultiplier(100 / distance)
+        self:SetSpeedMultiplier(200 / distance)
         self:MoveInDirection(distanceVector:normalized())
     else
         self.idleTimer = self.idleTimer + dt
