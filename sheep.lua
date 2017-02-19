@@ -14,6 +14,7 @@ function Sheep:new(x, y)
     self:SetSpriteSizeFromPhysics()
     self.debugPhysics = true
 
+    self.layer = 1
     self.tag = 'sheep'
     self.baseSpeed = 50
     self.idleTime = math.random(MIN_IDLE_TIME, MAX_IDLE_TIME)
@@ -24,6 +25,7 @@ end
 function Sheep:Kill()
     self.super.Kill(self)
     self:SetSpriteVerticalMirror(true)
+    self:SetLayer(0)
 end
 
 function Sheep:update(dt)

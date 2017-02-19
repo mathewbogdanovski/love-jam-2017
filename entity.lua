@@ -112,6 +112,15 @@ function Entity:IsVisible()
     return(self.visible)
 end
 
+function Entity:SetLayer(layer)
+    self.layer = layer
+    gSort_Entities_Callback = true
+end
+
+function Entity:GetLayer()
+    return(self.layer)
+end
+
 function Entity:RegisterPhysics(w, h, type)
     self.physics = {}
     self.physics.body = love.physics.newBody(mPhysicsWorld, self.position.x, self.position.y, type) -- types: "dynamic" "kinematic" "static"

@@ -20,8 +20,9 @@ function Level:update(dt)
 
     self.timeElapsed = (self.timeElapsed + dt)
 
-    if self.timeElapsed > 5 then
-        mEntityManager:GetEntities()[1]:Kill()
+    local entities = mEntityManager:GetEntities()
+    if self.timeElapsed > 5 and not entities[1]:IsKilled() then
+        entities[1]:Kill()
     end
 end
 

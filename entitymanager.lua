@@ -1,5 +1,7 @@
 EntityManager = Object:extend()
 
+gSort_Entities_Callback = false
+
 require "sheep"
 
 function EntityManager:new()
@@ -13,6 +15,11 @@ function EntityManager:draw()
 end
 
 function EntityManager:update(dt)
+	if gSort_Entities_Callback == true then
+		self:SortEntities()
+		gSort_Entities_Callback = false
+	end
+
     for i,entity in ipairs(self.entities) do
         entity:update(dt)
     end
@@ -22,6 +29,7 @@ function EntityManager:CreateBoxEntity(x, y, physics)
     local entity = Entity(Assets.Graphics.Sprites.Box, x, y)
     if physics then
         entity:RegisterPhysics(64, 64, "dynamic")
+        entity:SetSpriteSizeFromPhysics()
     end
     return self:AddEntity(entity)
 end
@@ -33,7 +41,16 @@ end
 
 function EntityManager:AddEntity(entity)
     table.insert(self.entities, entity)
+    self:SortEntities()
     return entity
+end
+
+function SortEntityLayers(a,b)
+  return(a:GetLayer() < b:GetLayer())
+end
+
+function EntityManager:SortEntities()
+	table.sort(self.entities, SortEntityLayers)
 end
 
 function EntityManager:GetEntities()
