@@ -33,8 +33,8 @@ function Entity:draw()
                             self.rotation,
                             self.scale * self.mirrorSpriteHorizontal * gWorldToScreenX,
                             self.scale * self.mirrorSpriteVertical * gWorldToScreenY,
-                            self.scale * (self.currentSprite:getWidth() / 2) * gWorldToScreenX, 
-                            self.scale * (self.currentSprite:getHeight() / 2) * gWorldToScreenY)
+                            self.currentSprite:getWidth() / 2, 
+                            self.currentSprite:getHeight() / 2)
 
         if self:HasPhysics() and self.debugPhysics == true then
             love.graphics.push()
