@@ -1,8 +1,27 @@
 --! file: main.lua
 require "catui"
 Vector = require "Libraries.hump.vector"
+Ripple = require "Libraries.ripple.ripple"
 
 mLevel = nil
+mSoundTags = {
+    sfx = Ripple.newTag(),
+    music = Ripple.newTag(),
+    master = Ripple.newTag()
+}
+mSounds = {
+    sheepSaved = Ripple.newSound('Assets/Audio/Sound/sheepsaved.ogg', {tags = {mSoundTags.sfx, mSoundTags.master}}),
+    sheepKilled = Ripple.newSound('Assets/Audio/Sound/sheepkilled.ogg', {tags = {mSoundTags.sfx, mSoundTags.master}})
+}
+mMusic = {
+  gameplay = Ripple.newSound('Assets/Audio/Music/gameplay.ogg', {
+    bpm = 130,
+    length = '32m',
+    loop = true,
+    tags = {mSoundTags.music, mSoundTags.master},
+  })
+}
+
 Object = require "Libraries.classic.classic"
 require "level"
 
@@ -41,6 +60,8 @@ function love.load()
 
     Gamestate.registerEvents()
     Gamestate.switch(mMenuState)
+
+    mMusic.gameplay:play()
 end
 
 function love.draw()
@@ -141,8 +162,14 @@ end
 
 --------------- GAME STATE ---------------
 
-local function loadGameUI()
+local mScoreLabel = nil
 
+local function loadGameUI()
+    mScoreLabel = UILabel:new("Assets/Fonts/expressway rg.ttf", "Score: " .. 0, 24)
+    mScoreLabel:setAnchor(0, 0)
+    mScoreLabel:setSize(100, 100)
+    mScoreLabel:setAutoSize(false)
+    mUIManager.rootCtrl.coreContainer:addChild(mScoreLabel)
 end
 
 function mGameState:enter()
@@ -152,6 +179,7 @@ end
 
 function mGameState:draw()
     mLevel:draw()
+    mUIManager:draw()
 end
 
 function mGameState:update(dt)
@@ -189,6 +217,10 @@ end
 
 function mGameState:textinput(text)
     mUIManager:textInput(text)
+end
+
+UpdateScore = function()
+    mScoreLabel:setText("Score: " .. mLevel:GetScore())
 end
 
 CheckWinState = function()

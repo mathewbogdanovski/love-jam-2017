@@ -12,6 +12,7 @@ function Level:new()
     self.levelLoaded = false
     self.timeElapsed = 0
     self.remainingSheep = 10
+    self.score = 0
 end
 
 function Level:draw()
@@ -39,6 +40,9 @@ function Level:update(dt)
 				sheep[i]:Kill()
 				mEntityManager:RemoveEntity(sheep[i])
 				self.remainingSheep = self.remainingSheep + 1
+				self.score = self.score + 1
+				mSounds.sheepSaved:play()
+				UpdateScore()
 				mCheckWinState = true
 			elseif sheepPos.x < 0 or sheepPos.y > WORLD_MAX_Y or sheepPos.y < 0 then
 				sheep[i]:Kill()
@@ -116,6 +120,10 @@ function Level:GetStageNum()
 	return(self.stage)
 end
 
+function Level:GetScore()
+	return(self.score)
+end
+
 function Level:CheckWinState()
 	local roundOver = true
 
@@ -166,25 +174,12 @@ local function GetEntitiesByFixtures(a, b)
 	end
 end
 
-local function KillEntityByFixture(fixture, tag)
-	local entities = mEntityManager:GetEntitiesByTags({ tag })
-	for i=1,#entities do
-		if not entities[i]:IsKilled() and entities[i].physics.fixture == fixture then
-			entities[i]:Kill()
-			break
-		end
-	end
-end
-
 function BeginContact(a, b, coll)
-	local aTag = a:getUserData()
-	local bTag = b:getUserData()
-	if aTag ~= bTag then
-		if aTag == 'sheep' and bTag == 'enemy' then
-			KillEntityByFixture(a, aTag)
-			mCheckWinState = true
-		elseif aTag == 'enemy' and bTag == 'sheep' then
-			KillEntityByFixture(b, bTag)
+	local entityA, entityB = GetEntitiesByFixtures(a, b)
+	if entityA ~= nil and entityA:is(Avatar) and entityB ~= nil and entityB:is(Avatar) then
+		if entityA:GetFaction() ~= entityB:GetFaction() then
+			entityA:Attack(entityB)
+			entityB:Attack(entityA)
 			mCheckWinState = true
 		end
 	end

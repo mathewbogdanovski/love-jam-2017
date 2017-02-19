@@ -10,6 +10,16 @@ function Avatar:new(image, x, y)
     self.speedMultiplier = 1.0
     self.baseSpeed = 5
     self.killedSprite = nil
+    self.attackDamage = 100
+    self.attackSpeed = 1
+    self.attackTimer = 0
+end
+
+function Avatar:update(dt)
+    Avatar.super.update(self, dt)
+    if self.attackTimer < self.attackSpeed then
+        self.attackTimer = self.attackTimer + dt
+    end
 end
 
 function Avatar:SetHealth(health)
@@ -17,6 +27,10 @@ function Avatar:SetHealth(health)
     if health <= 0 then
         self:Kill()
     end
+end
+
+function Avatar:TakeDamage(damage)
+    self:SetHealth(self.health - damage)
 end
 
 function Avatar:GetHealth()
@@ -64,5 +78,11 @@ function Avatar:MoveInDirection(direction)
         self:SetSpriteHorizontalMirror(false)
     elseif direction.x > 0 then
         self:SetSpriteHorizontalMirror(true)
+    end
+end
+
+function Avatar:Attack(target)
+    if target ~= nil and target:is(Avatar) and self.attackTimer >= self.attackSpeed then
+        target:TakeDamage(self.attackDamage)
     end
 end

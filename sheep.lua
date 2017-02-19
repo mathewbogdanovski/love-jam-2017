@@ -3,6 +3,7 @@ require "avatar"
 Sheep = Avatar:extend()
 
 local MAXIMUM_PLAYER_DISTANCE_SQUARED = 100
+local MINIMUM_CHASE_SPEED_MULTIPLIER = 0.7
 local MIN_IDLE_TIME = 1
 local MAX_IDLE_TIME = 3
 
@@ -16,6 +17,7 @@ function Sheep:new(x, y)
     self.physics.body:setFixedRotation(true)
     self.debugPhysics = true
 
+    self.attackDamage = 0
     self.baseSpeed = 50
     self.idleTime = math.random(MIN_IDLE_TIME, MAX_IDLE_TIME)
     self.idleTimer = 0
@@ -26,6 +28,7 @@ function Sheep:Kill()
     self.super.Kill(self)
     self:SetSpriteVerticalMirror(true)
     self:SetLayer(0)
+    mSounds.sheepKilled:play()
 end
 
 function Sheep:update(dt)
@@ -39,7 +42,8 @@ function Sheep:update(dt)
     local distanceVector = self.position - mousePosition
     local distance = distanceVector:len()
     if distance <= MAXIMUM_PLAYER_DISTANCE_SQUARED then
-        self:SetSpeedMultiplier(200 / distance)
+        local speedMultiplier = math.max(MINIMUM_CHASE_SPEED_MULTIPLIER, 200 / distance)
+        self:SetSpeedMultiplier(speedMultiplier)
         self:MoveInDirection(distanceVector:normalized())
     else
         self.idleTimer = self.idleTimer + dt

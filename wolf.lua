@@ -3,6 +3,7 @@ require "avatar"
 Wolf = Avatar:extend()
 
 local MAXIMUM_PLAYER_DISTANCE_SQUARED = 100
+local MINIMUM_CHASE_SPEED_MULTIPLIER = 0.7
 local TARGET_SEARCH_INTERVAL = 4
 local IDLE_AFTER_KILL_TIME = 6
 
@@ -16,7 +17,7 @@ function Wolf:new(x, y)
     self.physics.body:setFixedRotation(true)
     self.debugPhysics = true
 
-    self.baseSpeed = 35
+    self.baseSpeed = math.random(30, 50)
     self.killedSprite = Assets.Graphics.SheepDead
 
     self.targetTimer = 0
@@ -74,7 +75,8 @@ function Wolf:update(dt)
     local distanceVector = self.position - mousePosition
     local distance = distanceVector:len()
     if distance <= MAXIMUM_PLAYER_DISTANCE_SQUARED then
-        self:SetSpeedMultiplier(200 / distance)
+        local speedMultiplier = math.max(MINIMUM_CHASE_SPEED_MULTIPLIER, 200 / distance)
+        self:SetSpeedMultiplier(speedMultiplier)
         self:MoveInDirection(distanceVector:normalized())
     end
 end
