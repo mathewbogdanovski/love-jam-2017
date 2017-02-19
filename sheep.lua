@@ -2,7 +2,7 @@ require "avatar"
 
 Sheep = Avatar:extend()
 
-local MAXIMUM_PLAYER_DISTANCE_SQUARED = 10000
+local MAXIMUM_PLAYER_DISTANCE_SQUARED = 100
 local MIN_IDLE_TIME = 1
 local MAX_IDLE_TIME = 3
 
@@ -19,7 +19,7 @@ function Sheep:new(x, y)
 
     self.baseSpeed = 50
     self.idleTime = math.random(MIN_IDLE_TIME, MAX_IDLE_TIME)
-    self.idleTimer = self.idleTime
+    self.idleTimer = 0
     self.killedSprite = Assets.Graphics.SheepDead
 end
 
@@ -48,7 +48,7 @@ function Sheep:update(dt)
             self.idleTimer = 0
             self.idleTime = math.random(MIN_IDLE_TIME, MAX_IDLE_TIME)
             local newDirection = Vector(0, 0)
-            if math.random() < 0.6 then
+            if math.random() < 0.45 then
                 newDirection = Vector(math.random(-100, 100), math.random(-100, 100))
                 newDirection = newDirection:normalized()
             end

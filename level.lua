@@ -41,7 +41,7 @@ function Level:Load()
     local spawnBounds = { x1 = 0,
                             x2 = 300,
                             y1 = 0,
-                            y2 = 400 }
+                            y2 = 300 }
 
     local spawnWidth = (spawnBounds.x2 - spawnBounds.x1)
     local spawnHeight = (spawnBounds.y2 - spawnBounds.y1)

@@ -2,6 +2,8 @@ require "avatar"
 
 Wolf = Avatar:extend()
 
+local MAXIMUM_PLAYER_DISTANCE_SQUARED = 100
+
 function Wolf:new(x, y)
     Wolf.super.new(self, Assets.Graphics.Sprites.box, x, y)
     self:SetFaction(GC_FACTIONS.WILD)
@@ -49,6 +51,14 @@ function Wolf:update(dt)
 
     if self.target ~= nil and not self.target:IsKilled() then
         local distanceVector = self.target:GetPosition() - self:GetPosition()
+        self:MoveInDirection(distanceVector:normalized())
+    end
+
+    local mousePosition = Vector(love.mouse:getX(), love.mouse:getY())
+    local distanceVector = self.position - mousePosition
+    local distance = distanceVector:len()
+    if distance <= MAXIMUM_PLAYER_DISTANCE_SQUARED then
+        self:SetSpeedMultiplier(100 / distance)
         self:MoveInDirection(distanceVector:normalized())
     end
 end
