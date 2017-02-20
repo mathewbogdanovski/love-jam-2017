@@ -6,7 +6,7 @@ local MAXIMUM_PLAYER_DISTANCE = 200
 local MAXIMUM_SHEPHERD_DISTANCE = 250
 local MINIMUM_CHASE_SPEED_MULTIPLIER = 0.7
 local TARGET_SEARCH_INTERVAL = 4
-local IDLE_AFTER_KILL_TIME = 6
+local IDLE_TIME = 4
 
 function Wolf:new(x, y)
     Wolf.super.new(self, Assets.Graphics.Wolf, x, y)
@@ -21,7 +21,7 @@ function Wolf:new(x, y)
     self.killedSprite = Assets.Graphics.SheepDead
 
     self.targetTimer = 0
-    self.idleTimer = 0
+    self.idleTimer = IDLE_TIME
 end
 
 function Wolf:Kill()
@@ -40,13 +40,16 @@ function Wolf:update(dt)
     if self.target ~= nil then
         if self.target:IsGarbage() then
             self.target = nil
-        elseif self.target:IsKilled() then
-            self:MoveInDirection(Vector(0,0))
-            self.idleTimer = self.idleTimer + dt
-            if self.idleTimer >= IDLE_AFTER_KILL_TIME then
-                self.idleTimer = 0
-                self.target = nil
-            end
+        elseif self.target:IsKilled() and self.idleTimer >= IDLE_TIME then
+            self.idleTimer = 0
+        end
+    end
+
+    if self.idleTimer < IDLE_TIME then
+        self:MoveInDirection(Vector(0,0))
+        self.idleTimer = self.idleTimer + dt
+        if self.idleTimer >= IDLE_TIME then
+            self.target = nil
         end
     end
 
@@ -73,7 +76,7 @@ function Wolf:update(dt)
     local moveVector = nil
     local speedMultiplier = 1
 
-    if self.target ~= nil and not self.target:IsKilled() then
+    if self.idleTimer >= IDLE_TIME and self.target ~= nil and not self.target:IsKilled() then
         moveVector = self.target:GetPosition() - self:GetPosition()
     end
 
@@ -100,6 +103,9 @@ function Wolf:update(dt)
         if distance <= MAXIMUM_SHEPHERD_DISTANCE then
             speedMultiplier = 2.5
             moveVector = distanceVector
+            if self.idleTimer >= IDLE_TIME then
+                self.idleTimer = 0
+            end
         end
     end
 
