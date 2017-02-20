@@ -9,7 +9,7 @@ local TARGET_SEARCH_INTERVAL = 4
 local IDLE_AFTER_KILL_TIME = 6
 
 function Wolf:new(x, y)
-    Wolf.super.new(self, Assets.Graphics.box, x, y)
+    Wolf.super.new(self, Assets.Graphics.Wolf, x, y)
     self:SetFaction(GC_FACTIONS.WILD)
     self.layer = 1
     self.tag = 'enemy'
