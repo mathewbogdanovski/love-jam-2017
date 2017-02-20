@@ -2,6 +2,9 @@ EntityManager = Object:extend()
 
 require "sheep"
 require "wolf"
+require "shepherd"
+require "insect"
+require "parasite"
 require "backgroundDeco"
 
 function EntityManager:new()
@@ -47,6 +50,21 @@ end
 function EntityManager:CreateWolf(x, y)
     local wolf = Wolf(x, y)
     return self:AddEntity(wolf)
+end
+
+function EntityManager:CreateShepherd(x, y)
+    local shepherd = Shepherd(x, y)
+    return self:AddEntity(shepherd)
+end
+
+function EntityManager:CreateInsect(x, y)
+    local insect = Insect(x, y)
+    return self:AddEntity(insect)
+end
+
+function EntityManager:CreateParasite(x, y)
+    local parasite = Parasite(x, y)
+    return self:AddEntity(parasite)
 end
 
 function EntityManager:AddEntity(entity)

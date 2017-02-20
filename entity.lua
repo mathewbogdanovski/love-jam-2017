@@ -167,6 +167,13 @@ function Entity:HasPhysics()
     return(self.physics ~= nil)
 end
 
+function Entity:RaycastMouse()
+    if self:HasPhysics() == true then
+        return(self.physics.fixture:testPoint(love.mouse:getX(), love.mouse:getY()))
+    end
+    return(false)
+end
+
 function Entity:SetVelocity(velocity)
     if self:HasPhysics() then
         self.physics.body:setLinearVelocity(velocity.x, velocity.y)

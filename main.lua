@@ -103,6 +103,7 @@ local function loadCommonUI(content)
     instructionsLabel:setAnchor(0, 0)
     instructionsLabel:setSize(600, 600)
     instructionsLabel:setAutoSize(false)
+    instructionsLabel:setFontColor({0, 100, 0, 255})
     mUIManager.rootCtrl.coreContainer:addChild(instructionsLabel)
 
     local titleLabel = UILabel:new("Assets/Fonts/expressway rg.ttf", "Shepherd's Hand", 30)
@@ -244,6 +245,15 @@ end
 
 function mGameState:mousepressed(x, y, button, isTouch)
     mUIManager:mouseDown(x, y, button, isTouch)
+
+    if button == 2 then
+        local insects = mLevel:GetEntityManager():GetEntitiesByTypes({ Insect })
+        for i=1,#insects do
+            if insects[i]:RaycastMouse() == true then
+                insects[i]:Kill()
+            end
+        end
+    end
 end
 
 function mGameState:mousereleased(x, y, button, isTouch)

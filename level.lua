@@ -38,7 +38,7 @@ function Level:update(dt)
 
     self.timeElapsed = (self.timeElapsed + dt)
 
-    local sheep = mEntityManager:GetEntitiesByTypes({ Sheep })
+    local sheep = mEntityManager:GetEntitiesByTags({ 'sheep' })
     for i=1,#sheep do
         if sheep[i] ~= nil and not sheep[i]:IsKilled() then
             local sheepPos = sheep[i]:GetPosition()
@@ -97,14 +97,16 @@ function Level:Load()
     local currCol = 0
 
     for i = 1, self.remainingSheep do
-        local sheep = mEntityManager:CreateSheep(
             xOffset + (currCol * widthIncrement) + widthIncrement / 2, 
             yOffset + (currRow * heightIncrement) + heightIncrement / 2)
 
         if fighterSheep > 0 then
             fighterSheep = fighterSheep - 1
-            sheep:SetAttackDamage(50)
-            sheep:SetTag('shepherd')
+            mEntityManager:CreateShepherd(
+	            xOffset + (currCol * widthIncrement) + widthIncrement / 2, 
+	            yOffset + (currRow * heightIncrement) + heightIncrement / 2)
+        else
+
         end
 
         currCol = currCol + 1
@@ -126,6 +128,8 @@ function Level:Load()
             break
         end
     end
+
+    mEntityManager:CreateInsect(900, 600)
 
     --walls
     mEntityManager:CreateEmptyEntity(WORLD_MAX_X / 2, 0, true, WORLD_MAX_X, 1)
@@ -158,7 +162,7 @@ end
 function Level:CheckWinState()
     local roundOver = true
 
-    local sheep = mEntityManager:GetEntitiesByTypes({ Sheep })
+    local sheep = mEntityManager:GetEntitiesByTags({ 'sheep' })
     for i=1,#sheep do
         if sheep[i] ~= nil and not sheep[i]:IsKilled() then
             roundOver = false
