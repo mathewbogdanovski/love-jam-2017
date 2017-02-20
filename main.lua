@@ -63,7 +63,7 @@ end
 function love.load()
     initWindow()
 
-    local cursor = love.mouse.newCursor("Assets/Graphics/UI/Cursor.png", 30, 8)
+    local cursor = love.mouse.newCursor("Assets/Graphics/UI/Cursor.png",5, 8)
     love.mouse.setCursor(cursor)
 
     mUIManager = UIManager:getInstance()
