@@ -3,6 +3,7 @@ require "avatar"
 Sheep = Avatar:extend()
 
 local MAXIMUM_PLAYER_DISTANCE = 100
+local MAXIMUM_CHASE_SPEED_MULTIPLIER = 2
 local MINIMUM_CHASE_SPEED_MULTIPLIER = 0.7
 local MIN_IDLE_TIME = 1
 local MAX_IDLE_TIME = 3
@@ -43,10 +44,11 @@ function Sheep:update(dt)
         local distanceVector = self.position - mousePosition
         local distance = distanceVector:len()
         if distance <= MAXIMUM_PLAYER_DISTANCE then
-            local speedMultiplier = math.max(MINIMUM_CHASE_SPEED_MULTIPLIER, 200 / distance)
+            local speedMultiplier = 200 / distance
+            speedMultiplier = math.min(MAXIMUM_CHASE_SPEED_MULTIPLIER, speedMultiplier)
+            speedMultiplier = math.max(MINIMUM_CHASE_SPEED_MULTIPLIER, speedMultiplier)
             self:SetSpeedMultiplier(speedMultiplier)
             self:MoveInDirection(distanceVector:normalized())
-            self.idleTimer = 0
             mouseMoved = true
         end
     end
