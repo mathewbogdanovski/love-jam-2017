@@ -14,7 +14,7 @@ function Insect:new(x, y)
     self.layer = 10
     self.tag = 'enemy'
 
-    self:RegisterPhysics(30, 30, "dynamic")
+    self:RegisterPhysics(20, 20, "dynamic")
     self.physics.body:setFixedRotation(true)
 
     self.baseSpeed = math.random(30, 60)

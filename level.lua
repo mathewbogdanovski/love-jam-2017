@@ -36,7 +36,7 @@ function Level:GenerateInsectsAndParasites(dt)
     self.insectTimer = self.insectTimer + dt
     if self.insectTimer >= self.insectTime then
         self:SelectInsectTime()
-        local numInsects = math.min(3, math.random(1 + self.stage / 30, 1 + self.stage * 0.1))
+        local numInsects = math.random(self.stage + 2, self.stage + 4)
         for i=1,numInsects do
             local pos = self:GetRandomBorderPosition(30)
             mEntityManager:CreateInsect(pos.x, pos.y)
@@ -46,12 +46,22 @@ function Level:GenerateInsectsAndParasites(dt)
     self.parasiteTimer = self.parasiteTimer + dt
     if self.parasiteTimer >= self.parasiteTime then
         self:SelectParasiteTime()
-        local numParasites = math.min(3, math.random(1 + self.stage / 30, 1 + self.stage * 0.1))
+        local numParasites = math.min(self.stage - 6, self.stage - 5)
         for i=1,numParasites do
             local pos = self:GetRandomBorderPosition(30)
             mEntityManager:CreateParasite(pos.x, pos.y)
         end
     end
+end
+
+function Level:SelectInsectTime()
+    self.insectTimer = 0
+    self.insectTime = math.random(self.stage * 3 + 5, self.stage * 3 + 5)
+end
+
+function Level:SelectParasiteTime()
+    self.parasiteTimer = 0
+    self.parasiteTime = math.random(10, self.stage + 7)
 end
 
 function Level:UpdateSheepStatus()
@@ -130,14 +140,17 @@ function Level:Load()
             xOffset + (currCol * widthIncrement) + widthIncrement / 2, 
             yOffset + (currRow * heightIncrement) + heightIncrement / 2)
 
-        if fighterSheep > 0 then
-            fighterSheep = fighterSheep - 1
-            mEntityManager:CreateShepherd(
-	            xOffset + (currCol * widthIncrement) + widthIncrement / 2, 
-	            yOffset + (currRow * heightIncrement) + heightIncrement / 2)
-        else
-
+        currCol = currCol + 1
+        if currCol >= numColumns then
+                currCol = 0
+                currRow = currRow + 1
         end
+    end
+
+    for i = 1,fighterSheep do
+        mEntityManager:CreateShepherd(
+            xOffset + (currCol * widthIncrement) + widthIncrement / 2, 
+            yOffset + (currRow * heightIncrement) + heightIncrement / 2)
 
         currCol = currCol + 1
         if currCol >= numColumns then
@@ -159,6 +172,7 @@ function Level:Load()
         end
     end
     self:SelectInsectTime()
+    self:SelectParasiteTime()
 
     --walls
     mEntityManager:CreateEmptyEntity(WORLD_MAX_X / 2, 0, true, WORLD_MAX_X, 1)
@@ -170,16 +184,6 @@ end
 
 function Level:Destroy()
     mEntityManager:RemoveAllEntities()
-end
-
-function Level:SelectInsectTime()
-	self.insectTimer = 0
-	self.insectTime = math.random(math.max(0, 11.0 - self.stage * 0.5), math.max(20.0 / self.stage, 14.0 - self.stage * 0.5))
-end
-
-function Level:SelectParasiteTime()
-    self.parasiteTimer = 0
-    self.parasiteTime = math.random(math.max(0, 11.0 - self.stage * 0.5), math.max(20.0 / self.stage, 14.0 - self.stage * 0.5))
 end
 
 function Level:GetRandomBorderPosition(offset)

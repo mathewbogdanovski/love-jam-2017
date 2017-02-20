@@ -31,17 +31,21 @@ end
 function Parasite:Attack(target)
     self.super.Attack(self, target)
 
+    local shouldDie = false
     local sheep = mLevel:GetEntityManager():GetEntitiesByTypes({ Sheep })
     for i=1,#sheep do
         if not sheep[i]:IsKilled() then
             local distanceVector = sheep[i]:GetPosition() - self:GetPosition()
             if distanceVector:len() <= SPLASH_RADIUS then
                 sheep[i]:SetSick()
+                shouldDie = true
             end
         end
     end
 
-    self:Kill()
+    if shouldDie == true then
+        self:Kill()
+    end
 end
 
 function Parasite:update(dt)
