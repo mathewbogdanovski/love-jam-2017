@@ -3,7 +3,7 @@ require "avatar"
 Insect = Avatar:extend()
 
 local TARGET_SEARCH_INTERVAL = 4
-local SPLASH_RADIUS = 240
+local SPLASH_RADIUS = 170
 
 function Insect:new(x, y)
     Insect.super.new(self, Assets.Graphics.box, x, y)

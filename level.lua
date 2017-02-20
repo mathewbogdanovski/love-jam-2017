@@ -16,7 +16,6 @@ function Level:new()
     self.score = 0
 
     self:SelectInsectTime()
-    self:SelectParasiteTime()
 
     self.bgSprite = Assets.Graphics.Background
     self.bgDecoInfo = {}
@@ -33,7 +32,7 @@ function Level:draw()
     mEntityManager:draw()
 end
 
-function Level:GenerateInsectsAndParasites(dt)
+function Level:GenerateInsects(dt)
     self.insectTimer = self.insectTimer + dt
     if self.insectTimer >= self.insectTime then
         self:SelectInsectTime()
@@ -43,26 +42,11 @@ function Level:GenerateInsectsAndParasites(dt)
             mEntityManager:CreateInsect(pos.x, pos.y)
         end
     end
-
-    self.parasiteTimer = self.parasiteTimer + dt
-    if self.parasiteTimer >= self.parasiteTime then
-        self:SelectParasiteTime()
-        local numParasites = math.min(self.stage - 6, self.stage - 5)
-        for i=1,numParasites do
-            local pos = self:GetRandomBorderPosition(30)
-            mEntityManager:CreateParasite(pos.x, pos.y)
-        end
-    end
 end
 
 function Level:SelectInsectTime()
     self.insectTimer = 0
     self.insectTime = math.random(self.stage * 3 + 5, self.stage * 3 + 5)
-end
-
-function Level:SelectParasiteTime()
-    self.parasiteTimer = 0
-    self.parasiteTime = math.random(10, self.stage + 7)
 end
 
 function Level:UpdateSheepStatus()
@@ -95,7 +79,7 @@ function Level:update(dt)
     self.timeElapsed = (self.timeElapsed + dt)
 
     self:UpdateSheepStatus()
-    self:GenerateInsectsAndParasites(dt)
+    self:GenerateInsects(dt)
 
     if mCheckWinState == true then
         CheckWinState()
@@ -175,7 +159,6 @@ function Level:Load()
         end
     end
     self:SelectInsectTime()
-    self:SelectParasiteTime()
 
     --walls
     mEntityManager:CreateEmptyEntity(WORLD_MAX_X / 2, 0, true, WORLD_MAX_X, 1)
