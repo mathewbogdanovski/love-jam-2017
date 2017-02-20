@@ -69,7 +69,9 @@ function love.draw()
 end
 
 function love.update(dt)
-
+    for _, m in pairs(mMusic) do
+        m:update(dt)
+    end
 end
 
 function love.resize(w, h)

@@ -2,7 +2,7 @@ require "avatar"
 
 Sheep = Avatar:extend()
 
-local MAXIMUM_PLAYER_DISTANCE_SQUARED = 100
+local MAXIMUM_PLAYER_DISTANCE = 100
 local MINIMUM_CHASE_SPEED_MULTIPLIER = 0.7
 local MIN_IDLE_TIME = 1
 local MAX_IDLE_TIME = 3
@@ -41,22 +41,33 @@ function Sheep:update(dt)
     local mousePosition = Vector(love.mouse:getX() / gWorldToScreenX, love.mouse:getY() / gWorldToScreenY)
     local distanceVector = self.position - mousePosition
     local distance = distanceVector:len()
-    if distance <= MAXIMUM_PLAYER_DISTANCE_SQUARED then
+    if distance <= MAXIMUM_PLAYER_DISTANCE then
         local speedMultiplier = math.max(MINIMUM_CHASE_SPEED_MULTIPLIER, 200 / distance)
         self:SetSpeedMultiplier(speedMultiplier)
         self:MoveInDirection(distanceVector:normalized())
+        self.idleTimer = 0
     else
         self.idleTimer = self.idleTimer + dt
         if self.idleTimer >= self.idleTime then
             self.idleTimer = 0
             self.idleTime = math.random(MIN_IDLE_TIME, MAX_IDLE_TIME)
             local newDirection = Vector(0, 0)
-            if math.random() < 0.2 then
-                newDirection = Vector(math.random(-100, 100), math.random(-100, 100))
+            if math.random() < 0.5 then
+                newDirection = Vector(math.random(0, 100), math.random(-100, 100))
                 newDirection = newDirection:normalized()
             end
             self:SetSpeedMultiplier(1)
             self:MoveInDirection(newDirection)
         end
     end
+end
+
+function Sheep:draw()
+    love.graphics.push()
+        if self.attackDamage ~= 0 then
+            love.graphics.setColor(0, 0, 255, 255)
+        end
+        Sheep.super.draw(self)
+        love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.pop()
 end

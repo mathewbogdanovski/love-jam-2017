@@ -71,6 +71,22 @@ function Avatar:GetSpeed()
     return(self.baseSpeed * self.speedMultiplier)
 end
 
+function Avatar:SetAttackSpeed(speed)
+    self.attackSpeed = speed
+end
+
+function Avatar:GetAttackSpeed()
+    return(self.attackSpeed)
+end
+
+function Avatar:SetAttackDamage(attackDmg)
+    self.attackDamage = attackDmg
+end
+
+function Avatar:GetAttackDamage()
+    return(self.attackDamage)
+end
+
 function Avatar:MoveInDirection(direction)
     self:SetVelocity(self:GetSpeed() * direction)
 

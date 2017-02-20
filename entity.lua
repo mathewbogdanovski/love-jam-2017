@@ -114,6 +114,10 @@ function Entity:GetLayer()
     return(self.layer)
 end
 
+function Entity:SetTag(tag)
+    self.tag = tag
+end
+
 function Entity:GetTag()
     return(self.tag)
 end

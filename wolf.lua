@@ -2,7 +2,8 @@ require "avatar"
 
 Wolf = Avatar:extend()
 
-local MAXIMUM_PLAYER_DISTANCE_SQUARED = 100
+local MAXIMUM_PLAYER_DISTANCE = 200
+local MAXIMUM_SHEPHERD_DISTANCE = 450
 local MINIMUM_CHASE_SPEED_MULTIPLIER = 0.7
 local TARGET_SEARCH_INTERVAL = 4
 local IDLE_AFTER_KILL_TIME = 6
@@ -54,7 +55,7 @@ function Wolf:update(dt)
 
     if self.target == nil or (self.targetTimer >= TARGET_SEARCH_INTERVAL and self.target ~= nil and not self.target:IsKilled()) then
         self.targetTimer = 0
-        local sheep = mLevel:GetEntityManager():GetEntitiesByTypes({ Sheep })
+        local sheep = mLevel:GetEntityManager():GetEntitiesByTags({ 'sheep' })
         local closestSheep = nil
         local closestDist = 0
         for i=1,#sheep do
@@ -75,11 +76,33 @@ function Wolf:update(dt)
         self:MoveInDirection(distanceVector:normalized())
     end
 
+    local shepherds = mLevel:GetEntityManager():GetEntitiesByTags({ 'shepherd' })
+    local closestDist = 0
+    for i=1,#shepherds do
+        if not shepherds[i]:IsKilled() and shepherds[i] ~= self.closestShepherd then
+            local dist = shepherds[i]:GetPosition() - self:GetPosition()
+            dist = dist:len()
+            if dist < closestDist or self.closestShepherd == nil then
+                self.closestShepherd = shepherds[i]
+                closestDist = dist
+            end
+        end
+    end
+
+    if self.closestShepherd ~= nil and not self.closestShepherd:IsKilled() then
+        local distanceVector = self.position - self.closestShepherd:GetPosition()
+        local distance = distanceVector:len()
+        if distance <= MAXIMUM_SHEPHERD_DISTANCE then
+            self:SetSpeedMultiplier(1)
+            self:MoveInDirection(distanceVector:normalized())
+        end
+    end
+
     local mousePosition = Vector(love.mouse:getX() / gWorldToScreenX, love.mouse:getY() / gWorldToScreenY)
     local distanceVector = self.position - mousePosition
     local distance = distanceVector:len()
-    if distance <= MAXIMUM_PLAYER_DISTANCE_SQUARED then
-        local speedMultiplier = math.max(MINIMUM_CHASE_SPEED_MULTIPLIER, 200 / distance)
+    if distance <= MAXIMUM_PLAYER_DISTANCE then
+        local speedMultiplier = math.max(MINIMUM_CHASE_SPEED_MULTIPLIER, 400 / distance)
         self:SetSpeedMultiplier(speedMultiplier)
         self:MoveInDirection(distanceVector:normalized())
     end

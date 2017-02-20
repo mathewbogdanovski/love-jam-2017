@@ -61,6 +61,7 @@ function Level:Load()
 
     self.levelLoaded = true
     self.remainingSheep = math.min(self.remainingSheep + 10, MAX_NUM_SHEEP)
+    local fighterSheep = self.remainingSheep / 4
 
 
     --sheep
@@ -76,9 +77,16 @@ function Level:Load()
     local currRow = 0
     local currCol = 0
     for i = 1, self.remainingSheep do
-        mEntityManager:CreateSheep(
+        local sheep = mEntityManager:CreateSheep(
             xOffset + (currCol * widthIncrement) + widthIncrement / 2, 
             yOffset + (currRow * heightIncrement) + heightIncrement / 2)
+
+        if fighterSheep > 0 then
+        	fighterSheep = fighterSheep - 1
+        	sheep:SetAttackDamage(50)
+        	sheep:SetHealth(100)
+        	sheep:SetTag('shepherd')
+        end
 
         currCol = currCol + 1
         if currCol >= numColumns then
