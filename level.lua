@@ -15,6 +15,8 @@ function Level:new()
     self.remainingSheep = 10
     self.score = 0
 
+    self:SelectInsectTime()
+
     self.bgSprite = Assets.Graphics.Background
     self.bgDecoSprites = {}
     table.insert(self.bgDecoSprites, Assets.Graphics.Flower)
@@ -37,6 +39,16 @@ function Level:update(dt)
     mEntityManager:update(dt)
 
     self.timeElapsed = (self.timeElapsed + dt)
+
+    self.insectTimer = self.insectTimer + dt
+    if self.insectTimer >= self.insectTime then
+        self:SelectInsectTime()
+        local numInsects = math.min(3, math.random(1 + self.stage / 30, 1 + self.stage * 0.1))
+        for i=1,numInsects do
+            local pos = self:GetRandomBorderPosition(30)
+            mEntityManager:CreateInsect(pos.x, pos.y)
+        end
+    end
 
     local sheep = mEntityManager:GetEntitiesByTags({ 'sheep' })
     for i=1,#sheep do
@@ -79,11 +91,10 @@ function Level:Load()
         end
     end
 
+    --sheep
     self.remainingSheep = math.min(self.remainingSheep + 2, MAX_NUM_SHEEP)
     local fighterSheep = self.remainingSheep / 4
 
-
-    --sheep
     local xOffset = 50
     local yOffset = 50
     local spawnWidth = 300
@@ -121,16 +132,15 @@ function Level:Load()
 
     --enemies
     local yValue = 100
-    for i=1,self.stage do
+    local numWolves = self.stage - 1
+    for i=1,numWolves do
         mEntityManager:CreateWolf(1600, yValue)
-        mEntityManager:CreateWolf(1600, yValue + 100)
-        yValue = yValue + 200
+        yValue = yValue + 100
         if yValue >= WORLD_MAX_Y then
             break
         end
     end
-
-    mEntityManager:CreateInsect(900, 600)
+    self:SelectInsectTime()
 
     --walls
     mEntityManager:CreateEmptyEntity(WORLD_MAX_X / 2, 0, true, WORLD_MAX_X, 1)
@@ -142,6 +152,32 @@ end
 
 function Level:Destroy()
     mEntityManager:RemoveAllEntities()
+end
+
+function Level:SelectInsectTime()
+	self.insectTimer = 0
+	self.insectTime = math.random(math.max(0, 11.0 - self.stage * 0.5), math.max(20.0 / self.stage, 14.0 - self.stage * 0.5))
+end
+
+function Level:GetRandomBorderPosition(offset)
+    local position = Vector(0, 0)
+    local horizontal = math.random() > 0.5
+    if horizontal == true then
+        if math.random() > 0.5 then
+            position.x = offset
+        else
+            position.x = WORLD_MAX_X - offset
+        end
+        position.y = math.random(offset, WORLD_MAX_Y - offset)
+    else
+        if math.random() > 0.5 then
+            position.y = offset
+        else
+            position.y = WORLD_MAX_Y - offset
+        end
+        position.x = math.random(offset, WORLD_MAX_X - offset)
+    end
+    return(position)
 end
 
 function Level:GetEntityManager()
