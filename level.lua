@@ -83,7 +83,7 @@ function Level:Load()
 
         if fighterSheep > 0 then
         	fighterSheep = fighterSheep - 1
-        	if fighterSheep % 3 == 0 then
+        	if fighterSheep % 4 == 0 then
 	        	sheep:SetAttackDamage(50)
 	        	sheep:SetHealth(100)
 	        	sheep:SetTag('shepherd')
@@ -100,7 +100,7 @@ function Level:Load()
     self.remainingSheep = 0
 
     --enemies
-    local yValue = 200
+    local yValue = 100
     for i=1,self.stage do
     	mEntityManager:CreateWolf(1600, yValue)
     	mEntityManager:CreateWolf(1600, yValue + 100)
