@@ -2,11 +2,8 @@ require "avatar"
 
 Insect = Avatar:extend()
 
-local MAXIMUM_PLAYER_DISTANCE = 200
-local MAXIMUM_SHEPHERD_DISTANCE = 250
-local MINIMUM_CHASE_SPEED_MULTIPLIER = 0.7
 local TARGET_SEARCH_INTERVAL = 4
-local IDLE_AFTER_KILL_TIME = 6
+local SPLASH_RADIUS = 240
 
 function Insect:new(x, y)
     Insect.super.new(self, Assets.Graphics.box, x, y)
@@ -23,7 +20,7 @@ function Insect:new(x, y)
     self.targetTimer = 0
     self.idleTimer = 0
 
-    self.attackDamage = 50
+    self.attackDamage = 0
     self.attackSpeed = 2.5
 end
 
@@ -33,6 +30,26 @@ function Insect:Kill()
     self:SetLayer(9)
 end
 
+function Insect:Attack(target)
+    self.super.Attack(self, target)
+
+    local shouldDie = false
+    local sheep = mLevel:GetEntityManager():GetEntitiesByTypes({ Sheep })
+    for i=1,#sheep do
+        if not sheep[i]:IsKilled() then
+            local distanceVector = sheep[i]:GetPosition() - self:GetPosition()
+            if distanceVector:len() <= SPLASH_RADIUS then
+                sheep[i]:SetSick()
+                shouldDie = true
+            end
+        end
+    end
+
+    if shouldDie == true then
+        self:Kill()
+    end
+end
+
 function Insect:update(dt)
     Insect.super.update(self, dt)
 
@@ -40,24 +57,15 @@ function Insect:update(dt)
         return
     end
 
-    if self.target ~= nil then
-        if self.target:IsGarbage() then
-            self.target = nil
-        elseif self.target:IsKilled() then
-            self:MoveInDirection(Vector(0,0))
-            self.idleTimer = self.idleTimer + dt
-            if self.idleTimer >= IDLE_AFTER_KILL_TIME then
-                self.idleTimer = 0
-                self.target = nil
-            end
-        end
+    if self.target ~= nil and (self.target:IsGarbage() or self.target:IsKilled()) then
+        self.target = nil
     end
 
     self.targetTimer = self.targetTimer + dt
 
     if self.target == nil or (self.targetTimer >= TARGET_SEARCH_INTERVAL and self.target ~= nil and not self.target:IsKilled()) then
         self.targetTimer = 0
-        local sheep = mLevel:GetEntityManager():GetEntitiesByTags({ 'sheep' })
+        local sheep = mLevel:GetEntityManager():GetEntitiesByTypes({ Sheep })
         local closestSheep = nil
         local closestDist = 0
         for i=1,#sheep do
