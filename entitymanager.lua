@@ -2,6 +2,7 @@ EntityManager = Object:extend()
 
 require "sheep"
 require "wolf"
+require "backgroundDeco"
 
 function EntityManager:new()
     self.entities = {}
@@ -33,14 +34,19 @@ function EntityManager:CreateEmptyEntity(x, y, physics, w, h)
     return self:AddEntity(entity)
 end
 
+function EntityManager:CreateBackgroundDeco(sprite, x, y)
+    local deco = BackgroundDeco(sprite, x ,y)
+    return self:AddEntity(deco)
+end
+
 function EntityManager:CreateSheep(x, y)
     local sheep = Sheep(x, y)
     return self:AddEntity(sheep)
 end
 
 function EntityManager:CreateWolf(x, y)
-	local wolf = Wolf(x, y)
-	return self:AddEntity(wolf)
+    local wolf = Wolf(x, y)
+    return self:AddEntity(wolf)
 end
 
 function EntityManager:AddEntity(entity)
@@ -75,7 +81,7 @@ function SortEntityLayers(a,b)
 end
 
 function EntityManager:SortEntities()
-	table.sort(self.entities, SortEntityLayers)
+    table.sort(self.entities, SortEntityLayers)
 end
 
 function EntityManager:GetEntities()

@@ -1,6 +1,7 @@
 Level = Object:extend()
 
 require "entitymanager"
+require "gameConstants"
 
 local mEntityManager = nil
 local mCheckWinState = false
@@ -13,7 +14,10 @@ function Level:new()
     self.timeElapsed = 0
     self.remainingSheep = 10
     self.score = 0
-    self.background = Assets.Graphics.Background
+
+    self.bgSprite = Assets.Graphics.Background
+    self.bgDecoSprites = {}
+    table.insert(self.bgDecoSprites, Assets.Graphics.Flower)
 end
 
 function Level:draw()
@@ -21,7 +25,7 @@ function Level:draw()
         return
     end
 
-    love.graphics.draw(self.background, 0, 0, 0, gWorldToScreenX, gWorldToScreenY, 0, 0)
+    love.graphics.draw(self.bgSprite, 0, 0, 0, gWorldToScreenX, gWorldToScreenY, 0, 0)
     mEntityManager:draw()
 end
 
@@ -34,34 +38,47 @@ function Level:update(dt)
 
     self.timeElapsed = (self.timeElapsed + dt)
 
-	local sheep = mEntityManager:GetEntitiesByTypes({ Sheep })
-	for i=1,#sheep do
-		if sheep[i] ~= nil and not sheep[i]:IsKilled() then
-			local sheepPos = sheep[i]:GetPosition()
-			if sheepPos.x > WORLD_MAX_X then
-				mEntityManager:RemoveEntity(sheep[i])
-				self.remainingSheep = self.remainingSheep + 1
-				self.score = self.score + 1
-				mSounds.sheepSaved:play()
-				UpdateScore()
-				mCheckWinState = true
-			elseif sheepPos.x < 0 or sheepPos.y > WORLD_MAX_Y or sheepPos.y < 0 then
-				mEntityManager:RemoveEntity(sheep[i])
-				mCheckWinState = true
-			end
-		end
-	end
+    local sheep = mEntityManager:GetEntitiesByTypes({ Sheep })
+    for i=1,#sheep do
+        if sheep[i] ~= nil and not sheep[i]:IsKilled() then
+            local sheepPos = sheep[i]:GetPosition()
+            if sheepPos.x > WORLD_MAX_X then
+                mEntityManager:RemoveEntity(sheep[i])
+                self.remainingSheep = self.remainingSheep + 1
+                self.score = self.score + 1
+                mSounds.sheepSaved:play()
+                UpdateScore()
+                mCheckWinState = true
+            elseif sheepPos.x < 0 or sheepPos.y > WORLD_MAX_Y or sheepPos.y < 0 then
+                mEntityManager:RemoveEntity(sheep[i])
+                mCheckWinState = true
+            end
+        end
+    end
 
-	if mCheckWinState == true then
-		CheckWinState()
-		mCheckWinState = false
-	end
+    if mCheckWinState == true then
+        CheckWinState()
+        mCheckWinState = false
+    end
 end
 
 function Level:Load()
-	mEntityManager:RemoveAllEntities()
+    mEntityManager:RemoveAllEntities()
 
     self.levelLoaded = true
+
+    math.randomseed(os.time())
+    local numBackgroundDecos = math.random(20, 30)
+
+    if #self.bgDecoSprites > 0 then
+        for i = 1, numBackgroundDecos do
+            local posX = math.random(0, WORLD_MAX_X)
+            local posY = math.random(0, WORLD_MAX_Y)
+            local idx = math.random(1, #self.bgDecoSprites)
+            mEntityManager:CreateBackgroundDeco(self.bgDecoSprites[idx], posX, posY)
+        end
+    end
+
     self.remainingSheep = math.min(self.remainingSheep + 2, MAX_NUM_SHEEP)
     local fighterSheep = self.remainingSheep / 4
 

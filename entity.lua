@@ -131,6 +131,9 @@ function Entity:RegisterPhysics(w, h, type)
 end
 
 function Entity:UpdatePhysics()
+    if self.physics == nil then
+        return
+    end
     --TODO: should remove/disable physics when at min scale
     self.physics.shape = love.physics.newRectangleShape(0, 0, self.physics.width * self.scale, self.physics.height * self.scale)
 
