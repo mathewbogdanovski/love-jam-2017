@@ -2,6 +2,7 @@ require "avatar"
 
 Parasite = Avatar:extend()
 
+local SPLASH_RADIUS = 120
 local TARGET_SEARCH_INTERVAL = 4
 
 function Parasite:new(x, y)

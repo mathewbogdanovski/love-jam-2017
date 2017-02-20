@@ -68,6 +68,7 @@ function Sheep:update(dt)
                 end
             end
             local direction = Vector(0, 0)
+            if self.wolf ~= nil and not self.wolf:IsKilled() then
                 direction = self.wolf:GetPosition() - self:GetPosition()
             end
             self:SetSpeedMultiplier(1)
