@@ -18,7 +18,7 @@ mSounds = {
 mMusic = {
   gameplay = Ripple.newSound('Assets/Audio/Music/gameplay.ogg', {
     bpm = 130,
-    length = '32m',
+    length = '150s',
     loop = true,
     tags = {mSoundTags.music, mSoundTags.master},
   })
@@ -97,7 +97,7 @@ end
 --------------- MENU STATE ---------------
 
 local function loadCommonUI(content)
-    local instructions = "Safely escort the sheep and shepherds across the fields for as long as possible. \n\n Left click to herd animals. \n\n Wolves kill sheep. Wolves are afraid of shepherds."
+    local instructions = "Safely escort the sheep and shepherds across the fields for as long as possible. \n\n Left click to herd animals. \n Right click to squash bugs. \n Wolves are afraid of shepherds. \n Watch out for disease."
     local instructionsLabel = UILabel:new("Assets/Fonts/expressway rg.ttf", instructions, 24)
     instructionsLabel:setPos(350, 25)
     instructionsLabel:setAnchor(0, 0)
