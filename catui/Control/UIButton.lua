@@ -1,4 +1,4 @@
---[[
+﻿--[[
 The MIT License (MIT)
 
 Copyright (c) 2016 WilhanTian  田伟汉
@@ -159,9 +159,9 @@ end
 -------------------------------------
 function UIButton:onMouseEnter()
     self.isHoved = true
-    if love.mouse.getSystemCursor("hand") then
-        love.mouse.setCursor(love.mouse.getSystemCursor("hand"))
-    end
+    --if love.mouse.getSystemCursor("hand") then
+        --love.mouse.setCursor(love.mouse.getSystemCursor("hand"))
+    --end
 end
 
 -------------------------------------
@@ -169,8 +169,8 @@ end
 -- on mouse level
 -------------------------------------
 function UIButton:onMouseLeave()
-    self.isHoved = false
-    love.mouse.setCursor()
+    --self.isHoved = false
+    --love.mouse.setCursor()
 end
 
 -------------------------------------

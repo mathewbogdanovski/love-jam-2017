@@ -1,4 +1,3 @@
---! file: main.lua
 require "catui"
 Vector = require "Libraries.hump.vector"
 Ripple = require "Libraries.ripple.ripple"
@@ -64,8 +63,8 @@ end
 function love.load()
     initWindow()
 
-    --local cursor = love.mouse.newCursor("Assets/Graphics/UI/cursor.png", 0, 0)
-    --love.mouse.setCursor(cursor)
+    local cursor = love.mouse.newCursor("Assets/Graphics/UI/Cursor.png", 30, 8)
+    love.mouse.setCursor(cursor)
 
     mUIManager = UIManager:getInstance()
     
