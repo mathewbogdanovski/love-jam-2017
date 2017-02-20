@@ -20,7 +20,8 @@ function Level:new()
 
     self.bgSprite = Assets.Graphics.Background
     self.bgDecoInfo = {}
-    table.insert(self.bgDecoInfo, {sprite = Assets.Graphics.Flower, layer = 1, spawnWeight = 5})
+    table.insert(self.bgDecoInfo, {sprite = Assets.Graphics.Flower, layer = 1, minNum = 10, maxNum = 25, canRotate = false})
+    table.insert(self.bgDecoInfo, {sprite = Assets.Graphics.Dirt1, layer = 0, minNum = 0, maxNum = 3, canRotate = true})
 end
 
 function Level:draw()
@@ -98,14 +99,16 @@ function Level:Load()
     self.levelLoaded = true
 
     math.randomseed(os.time())
-    local numBackgroundDecos = math.random(20, 30)
 
-    if #self.bgDecoInfo > 0 then
-        for i = 1, numBackgroundDecos do
+    for i = 1, #self.bgDecoInfo do
+        local numOfType = math.random(self.bgDecoInfo[i].minNum, self.bgDecoInfo[i].maxNum)
+        local sprite = self.bgDecoInfo[i].sprite
+        local layer = self.bgDecoInfo[i].layer
+        for x = 1, numOfType do
             local posX = math.random(0, WORLD_MAX_X)
             local posY = math.random(0, WORLD_MAX_Y)
-            local idx = math.random(1, #self.bgDecoInfo)
-            mEntityManager:CreateBackgroundDeco(self.bgDecoInfo[idx].sprite, posX, posY, self.bgDecoInfo[idx].layer)
+            local rotation = self.bgDecoInfo[i].canRotate == true and (math.random() * 2 * math.pi) or 0
+            mEntityManager:CreateBackgroundDeco(sprite, posX, posY, rotation, layer)
         end
     end
 
@@ -133,8 +136,8 @@ function Level:Load()
         if fighterSheep > 0 then
             fighterSheep = fighterSheep - 1
             mEntityManager:CreateShepherd(
-	            xOffset + (currCol * widthIncrement) + widthIncrement / 2, 
-	            yOffset + (currRow * heightIncrement) + heightIncrement / 2)
+                xOffset + (currCol * widthIncrement) + widthIncrement / 2, 
+                yOffset + (currRow * heightIncrement) + heightIncrement / 2)
         else
 
         end
