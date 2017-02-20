@@ -2,11 +2,7 @@ require "avatar"
 
 Parasite = Avatar:extend()
 
-local MAXIMUM_PLAYER_DISTANCE = 200
-local MAXIMUM_SHEPHERD_DISTANCE = 250
-local MINIMUM_CHASE_SPEED_MULTIPLIER = 0.7
 local TARGET_SEARCH_INTERVAL = 4
-local IDLE_AFTER_KILL_TIME = 6
 
 function Parasite:new(x, y)
     Parasite.super.new(self, Assets.Graphics.box, x, y)
@@ -20,6 +16,7 @@ function Parasite:new(x, y)
     self.baseSpeed = math.random(10, 20)
     self.killedSprite = Assets.Graphics.SheepDead
 
+    self.attackDamage = 0
     self.targetTimer = 0
     self.idleTimer = 0
 end
@@ -30,6 +27,22 @@ function Parasite:Kill()
     self:SetLayer(9)
 end
 
+function Parasite:Attack(target)
+    self.super.Attack(self, target)
+
+    local sheep = mLevel:GetEntityManager():GetEntitiesByTypes({ Sheep })
+    for i=1,#sheep do
+        if not sheep[i]:IsKilled() then
+            local distanceVector = sheep[i]:GetPosition() - self:GetPosition()
+            if distanceVector:len() <= SPLASH_RADIUS then
+                sheep[i]:SetSick()
+            end
+        end
+    end
+
+    self:Kill()
+end
+
 function Parasite:update(dt)
     Parasite.super.update(self, dt)
 
@@ -38,15 +51,8 @@ function Parasite:update(dt)
     end
 
     if self.target ~= nil then
-        if self.target:IsGarbage() then
+        if self.target:IsGarbage() or self.target:IsKilled() then
             self.target = nil
-        elseif self.target:IsKilled() then
-            self:MoveInDirection(Vector(0,0))
-            self.idleTimer = self.idleTimer + dt
-            if self.idleTimer >= IDLE_AFTER_KILL_TIME then
-                self.idleTimer = 0
-                self.target = nil
-            end
         end
     end
 
@@ -54,7 +60,7 @@ function Parasite:update(dt)
 
     if self.target == nil or (self.targetTimer >= TARGET_SEARCH_INTERVAL and self.target ~= nil and not self.target:IsKilled()) then
         self.targetTimer = 0
-        local sheep = mLevel:GetEntityManager():GetEntitiesByTags({ 'sheep' })
+        local sheep = mLevel:GetEntityManager():GetEntitiesByTypes({ Sheep })
         local closestSheep = nil
         local closestDist = 0
         for i=1,#sheep do

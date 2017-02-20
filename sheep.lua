@@ -22,6 +22,7 @@ function Sheep:new(x, y)
     self.idleTime = math.random(MIN_IDLE_TIME, MAX_IDLE_TIME)
     self.idleTimer = 0
     self.killedSprite = Assets.Graphics.SheepDead
+    self.sick = false
 end
 
 function Sheep:Kill()
@@ -29,6 +30,10 @@ function Sheep:Kill()
     self:SetSpriteVerticalMirror(true)
     self:SetLayer(9)
     mSounds.sheepKilled:play()
+end
+
+function Sheep:SetSick()
+    self.sick = true
 end
 
 function Sheep:update(dt)
@@ -54,25 +59,40 @@ function Sheep:update(dt)
     end
 
     if not mouseMoved then
-        self.idleTimer = self.idleTimer + dt
-        if self.idleTimer >= self.idleTime then
-            self.idleTimer = 0
-            self.idleTime = math.random(MIN_IDLE_TIME, MAX_IDLE_TIME)
-            local newDirection = Vector(0, 0)
-            if math.random() < 0.5 then
-                newDirection = Vector(math.random(20, 100), math.random(-100, 100))
-                newDirection = newDirection:normalized()
+        if self.sick == true then
+            if self.wolf == nil or self.wolf:IsKilled() or self.wolf:IsGarbage() then
+                local wolves = mLevel:GetEntityManager():GetEntitiesByTypes({ Wolf })
+                if #wolves > 0 then
+                    local randIndex = math.random(1, #wolves)
+                    self.wolf = wolves[randIndex]
+                end
+            end
+            local direction = Vector(0, 0)
+                direction = self.wolf:GetPosition() - self:GetPosition()
             end
             self:SetSpeedMultiplier(1)
-            self:MoveInDirection(newDirection)
+            self:MoveInDirection(direction:normalized())
+        else
+            self.idleTimer = self.idleTimer + dt
+            if self.idleTimer >= self.idleTime then
+                self.idleTimer = 0
+                self.idleTime = math.random(MIN_IDLE_TIME, MAX_IDLE_TIME)
+                local newDirection = Vector(0, 0)
+                if math.random() < 0.5 then
+                    newDirection = Vector(math.random(20, 100), math.random(-100, 100))
+                    newDirection = newDirection:normalized()
+                end
+                self:SetSpeedMultiplier(1)
+                self:MoveInDirection(newDirection)
+            end
         end
     end
 end
 
 function Sheep:draw()
     love.graphics.push()
-        if self.attackDamage ~= 0 then
-            love.graphics.setColor(0, 0, 255, 255)
+        if self.sick == true then
+            love.graphics.setColor(0, 255, 0, 255)
         end
         Sheep.super.draw(self)
         love.graphics.setColor(255, 255, 255, 255)

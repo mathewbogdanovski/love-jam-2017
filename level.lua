@@ -16,6 +16,7 @@ function Level:new()
     self.score = 0
 
     self:SelectInsectTime()
+    self:SelectParasiteTime()
 
     self.bgSprite = Assets.Graphics.Background
     self.bgDecoInfo = {}
@@ -31,15 +32,7 @@ function Level:draw()
     mEntityManager:draw()
 end
 
-function Level:update(dt)
-    if not self.levelLoaded then
-        return
-    end
-
-    mEntityManager:update(dt)
-
-    self.timeElapsed = (self.timeElapsed + dt)
-
+function Level:GenerateInsectsAndParasites(dt)
     self.insectTimer = self.insectTimer + dt
     if self.insectTimer >= self.insectTime then
         self:SelectInsectTime()
@@ -50,6 +43,18 @@ function Level:update(dt)
         end
     end
 
+    self.parasiteTimer = self.parasiteTimer + dt
+    if self.parasiteTimer >= self.parasiteTime then
+        self:SelectParasiteTime()
+        local numParasites = math.min(3, math.random(1 + self.stage / 30, 1 + self.stage * 0.1))
+        for i=1,numParasites do
+            local pos = self:GetRandomBorderPosition(30)
+            mEntityManager:CreateParasite(pos.x, pos.y)
+        end
+    end
+end
+
+function Level:UpdateSheepStatus()
     local sheep = mEntityManager:GetEntitiesByTags({ 'sheep' })
     for i=1,#sheep do
         if sheep[i] ~= nil and not sheep[i]:IsKilled() then
@@ -67,6 +72,19 @@ function Level:update(dt)
             end
         end
     end
+end
+
+function Level:update(dt)
+    if not self.levelLoaded then
+        return
+    end
+
+    mEntityManager:update(dt)
+
+    self.timeElapsed = (self.timeElapsed + dt)
+
+    self:UpdateSheepStatus()
+    self:GenerateInsectsAndParasites(dt)
 
     if mCheckWinState == true then
         CheckWinState()
@@ -157,6 +175,11 @@ end
 function Level:SelectInsectTime()
 	self.insectTimer = 0
 	self.insectTime = math.random(math.max(0, 11.0 - self.stage * 0.5), math.max(20.0 / self.stage, 14.0 - self.stage * 0.5))
+end
+
+function Level:SelectParasiteTime()
+    self.parasiteTimer = 0
+    self.parasiteTime = math.random(math.max(0, 11.0 - self.stage * 0.5), math.max(20.0 / self.stage, 14.0 - self.stage * 0.5))
 end
 
 function Level:GetRandomBorderPosition(offset)
