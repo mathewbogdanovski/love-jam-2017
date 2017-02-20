@@ -7,6 +7,7 @@ local MAXIMUM_CHASE_SPEED_MULTIPLIER = 2
 local MINIMUM_CHASE_SPEED_MULTIPLIER = 0.7
 local MIN_IDLE_TIME = 1
 local MAX_IDLE_TIME = 3
+local SICK_DURATION = 4
 
 function Sheep:new(x, y)
     Sheep.super.new(self, Assets.Graphics.Sheep, x, y)
@@ -23,6 +24,7 @@ function Sheep:new(x, y)
     self.idleTimer = 0
     self.killedSprite = Assets.Graphics.SheepDead
     self.sick = false
+    self.sickTimer = 0
 end
 
 function Sheep:Kill()
@@ -34,6 +36,7 @@ end
 
 function Sheep:SetSick()
     self.sick = true
+    self.sickTimer = 0
 end
 
 function Sheep:update(dt)
@@ -41,6 +44,13 @@ function Sheep:update(dt)
 
     if self:IsKilled() then
         return
+    end
+
+    if self.sick == true then
+        self.sickTimer = self.sickTimer + dt
+        if self.sickTimer >= SICK_DURATION then
+            self.sick = false 
+        end
     end
 
     local mouseMoved = false
