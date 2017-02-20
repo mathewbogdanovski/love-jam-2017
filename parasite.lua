@@ -11,7 +11,7 @@ local IDLE_AFTER_KILL_TIME = 6
 function Parasite:new(x, y)
     Parasite.super.new(self, Assets.Graphics.box, x, y)
     self:SetFaction(GC_FACTIONS.WILD)
-    self.layer = 1
+    self.layer = 10
     self.tag = 'enemy'
 
     self:RegisterPhysics(30, 30, "dynamic")
@@ -27,7 +27,7 @@ end
 function Parasite:Kill()
     self.super.Kill(self)
     self:SetSpriteVerticalMirror(true)
-    self:SetLayer(0)
+    self:SetLayer(9)
 end
 
 function Parasite:update(dt)

@@ -37,8 +37,8 @@ function EntityManager:CreateEmptyEntity(x, y, physics, w, h)
     return self:AddEntity(entity)
 end
 
-function EntityManager:CreateBackgroundDeco(sprite, x, y)
-    local deco = BackgroundDeco(sprite, x ,y)
+function EntityManager:CreateBackgroundDeco(sprite, x, y, layer)
+    local deco = BackgroundDeco(sprite, x ,y, layer)
     return self:AddEntity(deco)
 end
 

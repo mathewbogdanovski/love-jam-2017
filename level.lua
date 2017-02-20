@@ -18,8 +18,8 @@ function Level:new()
     self:SelectInsectTime()
 
     self.bgSprite = Assets.Graphics.Background
-    self.bgDecoSprites = {}
-    table.insert(self.bgDecoSprites, Assets.Graphics.Flower)
+    self.bgDecoInfo = {}
+    table.insert(self.bgDecoInfo, {sprite = Assets.Graphics.Flower, layer = 1, spawnWeight = 5})
 end
 
 function Level:draw()
@@ -82,12 +82,12 @@ function Level:Load()
     math.randomseed(os.time())
     local numBackgroundDecos = math.random(20, 30)
 
-    if #self.bgDecoSprites > 0 then
+    if #self.bgDecoInfo > 0 then
         for i = 1, numBackgroundDecos do
             local posX = math.random(0, WORLD_MAX_X)
             local posY = math.random(0, WORLD_MAX_Y)
-            local idx = math.random(1, #self.bgDecoSprites)
-            mEntityManager:CreateBackgroundDeco(self.bgDecoSprites[idx], posX, posY)
+            local idx = math.random(1, #self.bgDecoInfo)
+            mEntityManager:CreateBackgroundDeco(self.bgDecoInfo[idx].sprite, posX, posY, self.bgDecoInfo[idx].layer)
         end
     end
 

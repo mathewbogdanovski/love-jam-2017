@@ -11,7 +11,7 @@ local IDLE_TIME = 4
 function Wolf:new(x, y)
     Wolf.super.new(self, Assets.Graphics.Wolf, x, y)
     self:SetFaction(GC_FACTIONS.WILD)
-    self.layer = 1
+    self.layer = 10
     self.tag = 'enemy'
 
     self:RegisterPhysics(64, 64, "dynamic")
@@ -27,7 +27,7 @@ end
 function Wolf:Kill()
     self.super.Kill(self)
     self:SetSpriteVerticalMirror(true)
-    self:SetLayer(0)
+    self:SetLayer(9)
 end
 
 function Wolf:update(dt)

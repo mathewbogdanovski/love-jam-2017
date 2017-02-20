@@ -2,9 +2,9 @@ require 'entity'
 
 BackgroundDeco = Entity:extend()
 
-function BackgroundDeco:new(sprite, x,y)
+function BackgroundDeco:new(sprite, x, y, layer)
     BackgroundDeco.super.new(self, sprite, x, y)
-    self.layer = 0
+    self.layer = layer
     self.tag = 'bgDeco'
 end
 

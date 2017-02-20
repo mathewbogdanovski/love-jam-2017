@@ -11,7 +11,7 @@ local MAX_IDLE_TIME = 3
 function Sheep:new(x, y)
     Sheep.super.new(self, Assets.Graphics.Sheep, x, y)
     self:SetFaction(GC_FACTIONS.PLAYER)
-    self.layer = 1
+    self.layer = 10
     self.tag = 'sheep'
 
     self:RegisterPhysics(50, 50, "dynamic")
@@ -27,7 +27,7 @@ end
 function Sheep:Kill()
     self.super.Kill(self)
     self:SetSpriteVerticalMirror(true)
-    self:SetLayer(0)
+    self:SetLayer(9)
     mSounds.sheepKilled:play()
 end
 
