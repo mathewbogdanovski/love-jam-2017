@@ -97,6 +97,30 @@ end
 
 --------------- MENU STATE ---------------
 
+local function loadCommonUI(content)
+    local instructions = "Safely escort the sheep and shepherds across the fields for as long as possible. \n\n Left click to herd animals. \n\n Wolves kill sheep. Wolves are afraid of shepherds."
+    local instructionsLabel = UILabel:new("Assets/Fonts/expressway rg.ttf", instructions, 24)
+    instructionsLabel:setPos(350, 25)
+    instructionsLabel:setAnchor(0, 0)
+    instructionsLabel:setSize(600, 600)
+    instructionsLabel:setAutoSize(false)
+    mUIManager.rootCtrl.coreContainer:addChild(instructionsLabel)
+
+    local titleLabel = UILabel:new("Assets/Fonts/expressway rg.ttf", "Shepherd's Hand", 30)
+    titleLabel:setPos(30, 0)
+    titleLabel:setAnchor(0, 0)
+    titleLabel:setSize(300, 100)
+    titleLabel:setAutoSize(false)
+    content:addChild(titleLabel)
+
+    local highscoreLabel = UILabel:new("Assets/Fonts/expressway rg.ttf", "High Score: " .. mHighscore, 24)
+    highscoreLabel:setPos(65, 150)
+    highscoreLabel:setAnchor(0, 0)
+    highscoreLabel:setSize(300, 100)
+    highscoreLabel:setAutoSize(false)
+    content:addChild(highscoreLabel)
+end
+
 local function loadMainMenu()
     local content = UIContent:new()
     content:setPos(20, 20)
