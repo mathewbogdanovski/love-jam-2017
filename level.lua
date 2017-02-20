@@ -13,6 +13,7 @@ function Level:new()
     self.levelLoaded = false
     self.timeElapsed = 0
     self.remainingSheep = 10
+    self.remainingShepherds = 0
     self.score = 0
 
     self:SelectInsectTime()
@@ -36,7 +37,7 @@ function Level:GenerateInsects(dt)
     self.insectTimer = self.insectTimer + dt
     if self.insectTimer >= self.insectTime then
         self:SelectInsectTime()
-        local numInsects = math.random(self.stage + 2, self.stage + 4)
+        local numInsects = math.random((self.stage - 3)*2, (self.stage - 2)*2)
         for i=1,numInsects do
             local pos = self:GetRandomBorderPosition(30)
             mEntityManager:CreateInsect(pos.x, pos.y)
@@ -46,7 +47,7 @@ end
 
 function Level:SelectInsectTime()
     self.insectTimer = 0
-    self.insectTime = math.random(self.stage * 3 + 5, self.stage * 3 + 5)
+    self.insectTime = math.random(self.stage + 4, self.stage + 4)
 end
 
 function Level:UpdateSheepStatus()
@@ -56,7 +57,11 @@ function Level:UpdateSheepStatus()
             local sheepPos = sheep[i]:GetPosition()
             if sheepPos.x > WORLD_MAX_X then
                 mEntityManager:RemoveEntity(sheep[i])
-                self.remainingSheep = self.remainingSheep + 1
+                if sheep[i]:is(Sheep) then
+                    self.remainingSheep = self.remainingSheep + 1
+                elseif sheep[i]:is(Shepherd) then
+                    self.remainingShepherds = self.remainingShepherds + 1
+                end
                 self.score = self.score + 1
                 mSounds.sheepSaved:play()
                 UpdateScore()
@@ -108,10 +113,10 @@ function Level:Load()
 
     --sheep
     self.remainingSheep = math.min(self.remainingSheep + 2, MAX_NUM_SHEEP)
-    local fighterSheep = self.remainingSheep / 4
+    local fighterSheep = math.max(1, self.remainingSheep / 4)
 
     local xOffset = 50
-    local yOffset = 50
+    local yOffset = 300
     local spawnWidth = 300
     local spawnHeight = 300
     local numColumns = math.ceil((spawnWidth / spawnHeight) * math.sqrt(self.remainingSheep))
@@ -134,6 +139,8 @@ function Level:Load()
         end
     end
 
+    yOffset = 200
+    xOffset = xOffset + 400
     for i = 1,fighterSheep do
         mEntityManager:CreateShepherd(
             xOffset + (currCol * widthIncrement) + widthIncrement / 2, 
@@ -147,15 +154,21 @@ function Level:Load()
     end
 
     self.remainingSheep = 0
+    self.remainingShepherds = 0
 
     --enemies
     local yValue = 100
-    local numWolves = self.stage - 1
+    local xValue = 1400
+    local numWolves = self.stage
     for i=1,numWolves do
-        mEntityManager:CreateWolf(1600, yValue)
+        mEntityManager:CreateWolf(xValue, yValue)
         yValue = yValue + 100
         if yValue >= WORLD_MAX_Y then
-            break
+            yValue = 100
+            xValue = xValue + 200
+            if xValue >= WORLD_MAX_X then
+                break
+            end
         end
     end
     self:SelectInsectTime()
@@ -176,11 +189,7 @@ function Level:GetRandomBorderPosition(offset)
     local position = Vector(0, 0)
     local horizontal = math.random() > 0.5
     if horizontal == true then
-        if math.random() > 0.5 then
-            position.x = offset
-        else
-            position.x = WORLD_MAX_X - offset
-        end
+        position.x = offset
         position.y = math.random(offset, WORLD_MAX_Y - offset)
     else
         if math.random() > 0.5 then
@@ -210,21 +219,29 @@ function Level:GetScore()
 end
 
 function Level:CheckWinState()
-    local roundOver = true
-
-    local sheep = mEntityManager:GetEntitiesByTags({ 'sheep' })
+    local roundOverSheep = true
+    local sheep = mEntityManager:GetEntitiesByTypes({ Sheep })
     for i=1,#sheep do
         if sheep[i] ~= nil and not sheep[i]:IsKilled() then
-            roundOver = false
+            roundOverSheep = false
             break
         end
     end
 
-    return(roundOver)
+    local roundOverShepherd = true
+    sheep = mEntityManager:GetEntitiesByTypes({ Shepherd })
+    for i=1,#sheep do
+        if sheep[i] ~= nil and not sheep[i]:IsKilled() then
+            roundOverShepherd = false
+            break
+        end
+    end
+
+    return((roundOverSheep and self.remainingSheep == 0) or (roundOverShepherd and self.remainingShepherd == 0) or (roundOverSheep and roundOverShepherd))
 end
 
 function Level:EndRound()
-    if self.remainingSheep > 0 then
+    if self.remainingSheep > 0 and self.remainingShepherds > 0 then
         self:OnRoundWin()
         return true
     else

@@ -22,8 +22,6 @@ function Insect:new(x, y)
 
     self.attackDamage = 0
     self.attackSpeed = 2.5
-
-    self.debugPhysics = true
 end
 
 function Insect:Kill()

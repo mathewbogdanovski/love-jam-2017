@@ -7,7 +7,7 @@ local MAXIMUM_CHASE_SPEED_MULTIPLIER = 2
 local MINIMUM_CHASE_SPEED_MULTIPLIER = 0.7
 local MIN_IDLE_TIME = 1
 local MAX_IDLE_TIME = 3
-local SICK_DURATION = 4
+local SICK_DURATION = 6
 
 function Sheep:new(x, y)
     Sheep.super.new(self, Assets.Graphics.Sheep, x, y)
@@ -62,6 +62,9 @@ function Sheep:update(dt)
             local speedMultiplier = 200 / distance
             speedMultiplier = math.min(MAXIMUM_CHASE_SPEED_MULTIPLIER, speedMultiplier)
             speedMultiplier = math.max(MINIMUM_CHASE_SPEED_MULTIPLIER, speedMultiplier)
+            if love.keyboard.isDown('lshift') then
+                speedMultiplier = speedMultiplier * 2.5
+            end
             self:SetSpeedMultiplier(speedMultiplier)
             self:MoveInDirection(distanceVector:normalized())
             mouseMoved = true
@@ -89,8 +92,24 @@ function Sheep:update(dt)
                 self.idleTimer = 0
                 self.idleTime = math.random(MIN_IDLE_TIME, MAX_IDLE_TIME)
                 local newDirection = Vector(0, 0)
-                if math.random() < 0.5 then
+                if math.random() < 0.6 then
                     newDirection = Vector(math.random(20, 100), math.random(-100, 100))
+                    local shepherds = mLevel:GetEntityManager():GetEntitiesByTypes({ Shepherd })
+                    if #shepherds > 0 then
+                        local closestShepherd = nil
+                        local closestDist = 0
+                        for i=1,#shepherds do
+                            if shepherds[i] ~= closestShepherd and not shepherds[i]:IsKilled() then
+                                local vector = shepherds[i]:GetPosition() - self:GetPosition()
+                                local distance = vector:len()
+                                if distance < closestDist or closestShepherd == nil then
+                                    closestDist = distance
+                                    closestShepherd = shepherds[i]
+                                    newDirection = vector
+                                end
+                            end
+                        end
+                    end
                     newDirection = newDirection:normalized()
                 end
                 self:SetSpeedMultiplier(1)
