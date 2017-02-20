@@ -3,7 +3,7 @@ require "avatar"
 Wolf = Avatar:extend()
 
 local MAXIMUM_PLAYER_DISTANCE = 200
-local MAXIMUM_SHEPHERD_DISTANCE = 450
+local MAXIMUM_SHEPHERD_DISTANCE = 250
 local MINIMUM_CHASE_SPEED_MULTIPLIER = 0.7
 local TARGET_SEARCH_INTERVAL = 4
 local IDLE_AFTER_KILL_TIME = 6
@@ -71,13 +71,19 @@ function Wolf:update(dt)
         self.target = closestSheep
     end
 
+    local moveVector = nil
+    local speedMultiplier = 1
+
     if self.target ~= nil and not self.target:IsKilled() then
-        local distanceVector = self.target:GetPosition() - self:GetPosition()
-        self:MoveInDirection(distanceVector:normalized())
+        moveVector = self.target:GetPosition() - self:GetPosition()
     end
 
     local shepherds = mLevel:GetEntityManager():GetEntitiesByTags({ 'shepherd' })
     local closestDist = 0
+    if self.closestShepherd ~= nil then
+        closestDist = self.closestShepherd:GetPosition() - self:GetPosition()
+        closestDist = closestDist:len()
+    end
     for i=1,#shepherds do
         if not shepherds[i]:IsKilled() and shepherds[i] ~= self.closestShepherd then
             local dist = shepherds[i]:GetPosition() - self:GetPosition()
@@ -93,8 +99,8 @@ function Wolf:update(dt)
         local distanceVector = self.position - self.closestShepherd:GetPosition()
         local distance = distanceVector:len()
         if distance <= MAXIMUM_SHEPHERD_DISTANCE then
-            self:SetSpeedMultiplier(1)
-            self:MoveInDirection(distanceVector:normalized())
+            speedMultiplier = 2.5
+            moveVector = distanceVector
         end
     end
 
@@ -102,8 +108,12 @@ function Wolf:update(dt)
     local distanceVector = self.position - mousePosition
     local distance = distanceVector:len()
     if distance <= MAXIMUM_PLAYER_DISTANCE then
-        local speedMultiplier = math.max(MINIMUM_CHASE_SPEED_MULTIPLIER, 400 / distance)
-        self:SetSpeedMultiplier(speedMultiplier)
-        self:MoveInDirection(distanceVector:normalized())
+        speedMultiplier = math.max(MINIMUM_CHASE_SPEED_MULTIPLIER, 400 / distance)
+        moveVector = distanceVector
+    end
+
+    self:SetSpeedMultiplier(speedMultiplier)
+    if moveVector ~= nil then
+        self:MoveInDirection(moveVector:normalized())
     end
 end

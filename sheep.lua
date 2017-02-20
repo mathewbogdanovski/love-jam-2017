@@ -15,7 +15,6 @@ function Sheep:new(x, y)
 
     self:RegisterPhysics(50, 50, "dynamic")
     self.physics.body:setFixedRotation(true)
-    self.debugPhysics = true
 
     self.attackDamage = 0
     self.baseSpeed = 50
@@ -53,7 +52,7 @@ function Sheep:update(dt)
             self.idleTime = math.random(MIN_IDLE_TIME, MAX_IDLE_TIME)
             local newDirection = Vector(0, 0)
             if math.random() < 0.5 then
-                newDirection = Vector(math.random(0, 100), math.random(-100, 100))
+                newDirection = Vector(math.random(20, 100), math.random(-100, 100))
                 newDirection = newDirection:normalized()
             end
             self:SetSpeedMultiplier(1)

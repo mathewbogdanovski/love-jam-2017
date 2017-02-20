@@ -61,7 +61,7 @@ function Level:Load()
 
     self.levelLoaded = true
     self.remainingSheep = math.min(self.remainingSheep + 10, MAX_NUM_SHEEP)
-    local fighterSheep = self.remainingSheep / 4
+    local fighterSheep = self.remainingSheep
 
 
     --sheep
@@ -83,9 +83,11 @@ function Level:Load()
 
         if fighterSheep > 0 then
         	fighterSheep = fighterSheep - 1
-        	sheep:SetAttackDamage(50)
-        	sheep:SetHealth(100)
-        	sheep:SetTag('shepherd')
+        	if fighterSheep % 3 == 0 then
+	        	sheep:SetAttackDamage(50)
+	        	sheep:SetHealth(100)
+	        	sheep:SetTag('shepherd')
+	        end
         end
 
         currCol = currCol + 1
