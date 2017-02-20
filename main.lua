@@ -11,7 +11,8 @@ mSoundTags = {
 }
 mSounds = {
     sheepSaved = Ripple.newSound('Assets/Audio/Sound/sheepsaved.ogg', {tags = {mSoundTags.sfx, mSoundTags.master}}),
-    sheepKilled = Ripple.newSound('Assets/Audio/Sound/sheepkilled.ogg', {tags = {mSoundTags.sfx, mSoundTags.master}})
+    sheepKilled = Ripple.newSound('Assets/Audio/Sound/sheepkilled.ogg', {tags = {mSoundTags.sfx, mSoundTags.master}}),
+    roundWin = Ripple.newSound('Assets/Audio/Sound/roundwin.ogg', {tags = {mSoundTags.sfx, mSoundTags.master}})
 }
 mMusic = {
   gameplay = Ripple.newSound('Assets/Audio/Music/gameplay.ogg', {

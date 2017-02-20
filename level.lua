@@ -100,9 +100,12 @@ function Level:Load()
     self.remainingSheep = 0
 
     --enemies
-    mEntityManager:CreateWolf(1600, 750)
-    mEntityManager:CreateWolf(1600, 850)
-    mEntityManager:CreateWolf(1600, 950)
+    local yValue = 200
+    for i=1,self.stage do
+    	mEntityManager:CreateWolf(1600, yValue)
+    	mEntityManager:CreateWolf(1600, yValue + 100)
+    	yValue = yValue + 200
+    end
 
     --walls
     mEntityManager:CreateEmptyEntity(860, 0, true, 1920, 1)
@@ -157,6 +160,7 @@ function Level:EndRound()
 end
 
 function Level:OnRoundWin()
+	mSounds.roundWin:play()
 	self:SetStageNum(self:GetStageNum() + 1)
 	self:Load()
 end
