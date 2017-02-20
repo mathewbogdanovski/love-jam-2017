@@ -109,16 +109,6 @@ function Wolf:update(dt)
         end
     end
 
-    if love.mouse.isDown(1) == true then
-        local mousePosition = Vector(love.mouse:getX() / gWorldToScreenX, love.mouse:getY() / gWorldToScreenY)
-        local distanceVector = self.position - mousePosition
-        local distance = distanceVector:len()
-        if distance <= MAXIMUM_PLAYER_DISTANCE then
-            speedMultiplier = math.max(MINIMUM_CHASE_SPEED_MULTIPLIER, 400 / distance)
-            moveVector = distanceVector
-        end
-    end
-
     self:SetSpeedMultiplier(speedMultiplier)
     if moveVector ~= nil then
         self:MoveInDirection(moveVector:normalized())
