@@ -9,22 +9,24 @@ local TARGET_SEARCH_INTERVAL = 4
 local IDLE_AFTER_KILL_TIME = 6
 
 function Insect:new(x, y)
-    Insect.super.new(self, Assets.Graphics.box, x, y)
+    Insect.super.new(self, Assets.Graphics.Insect, x, y)
     self:SetFaction(GC_FACTIONS.WILD)
     self.layer = 10
     self.tag = 'enemy'
 
-    self:RegisterPhysics(20, 20, "dynamic")
+    self:RegisterPhysics(30, 30, "dynamic")
     self.physics.body:setFixedRotation(true)
 
     self.baseSpeed = math.random(30, 60)
-    self.killedSprite = Assets.Graphics.SheepDead
+    self.killedSprite = Assets.Graphics.InsectDead
 
     self.targetTimer = 0
     self.idleTimer = 0
 
     self.attackDamage = 50
     self.attackSpeed = 2.5
+
+    self.debugPhysics = true
 end
 
 function Insect:Kill()

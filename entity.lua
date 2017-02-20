@@ -169,7 +169,12 @@ end
 
 function Entity:RaycastMouse()
     if self:HasPhysics() == true then
-        return(self.physics.fixture:testPoint(love.mouse:getX(), love.mouse:getY()))
+        return(self.physics.shape:testPoint(
+                    self.physics.body:getX(),
+                    self.physics.body:getY(),
+                    self.physics.body:getAngle(),
+                    love.mouse:getX() / gWorldToScreenX,
+                    love.mouse:getY() / gWorldToScreenY))
     end
     return(false)
 end
