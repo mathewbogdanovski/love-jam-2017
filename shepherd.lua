@@ -47,6 +47,9 @@ function Shepherd:update(dt)
             local speedMultiplier = 200 / distance
             speedMultiplier = math.min(MAXIMUM_CHASE_SPEED_MULTIPLIER, speedMultiplier)
             speedMultiplier = math.max(MINIMUM_CHASE_SPEED_MULTIPLIER, speedMultiplier)
+            if love.keyboard.isDown('lshift') then
+                speedMultiplier = speedMultiplier * 2.5
+            end
             self:SetSpeedMultiplier(speedMultiplier)
             self:MoveInDirection(distanceVector:normalized())
             mouseMoved = true
