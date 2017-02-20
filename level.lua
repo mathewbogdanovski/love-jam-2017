@@ -13,6 +13,7 @@ function Level:new()
     self.timeElapsed = 0
     self.remainingSheep = 10
     self.score = 0
+    self.background = Assets.Graphics.Background
 end
 
 function Level:draw()
@@ -20,6 +21,7 @@ function Level:draw()
         return
     end
 
+    love.graphics.draw(self.background, 0, 0, 0, gWorldToScreenX, gWorldToScreenY, 0, 0)
     mEntityManager:draw()
 end
 
@@ -83,9 +85,9 @@ function Level:Load()
             yOffset + (currRow * heightIncrement) + heightIncrement / 2)
 
         if fighterSheep > 0 then
-        	fighterSheep = fighterSheep - 1
-        	sheep:SetAttackDamage(50)
-        	sheep:SetTag('shepherd')
+            fighterSheep = fighterSheep - 1
+            sheep:SetAttackDamage(50)
+            sheep:SetTag('shepherd')
         end
 
         currCol = currCol + 1
@@ -100,12 +102,12 @@ function Level:Load()
     --enemies
     local yValue = 100
     for i=1,self.stage do
-    	mEntityManager:CreateWolf(1600, yValue)
-    	mEntityManager:CreateWolf(1600, yValue + 100)
-    	yValue = yValue + 200
-    	if yValue >= WORLD_MAX_Y then
-    		break
-    	end
+        mEntityManager:CreateWolf(1600, yValue)
+        mEntityManager:CreateWolf(1600, yValue + 100)
+        yValue = yValue + 200
+        if yValue >= WORLD_MAX_Y then
+            break
+        end
     end
 
     --walls
@@ -117,7 +119,7 @@ function Level:Load()
 end
 
 function Level:Destroy()
-	mEntityManager:RemoveAllEntities()
+    mEntityManager:RemoveAllEntities()
 end
 
 function Level:GetEntityManager()
@@ -129,41 +131,41 @@ function Level:SetStageNum(stageNum)
 end
 
 function Level:GetStageNum()
-	return(self.stage)
+    return(self.stage)
 end
 
 function Level:GetScore()
-	return(self.score)
+    return(self.score)
 end
 
 function Level:CheckWinState()
-	local roundOver = true
+    local roundOver = true
 
-	local sheep = mEntityManager:GetEntitiesByTypes({ Sheep })
-	for i=1,#sheep do
-		if sheep[i] ~= nil and not sheep[i]:IsKilled() then
-			roundOver = false
-			break
-		end
-	end
+    local sheep = mEntityManager:GetEntitiesByTypes({ Sheep })
+    for i=1,#sheep do
+        if sheep[i] ~= nil and not sheep[i]:IsKilled() then
+            roundOver = false
+            break
+        end
+    end
 
-	return(roundOver)
+    return(roundOver)
 end
 
 function Level:EndRound()
-	if self.remainingSheep > 0 then
-		self:OnRoundWin()
-		return true
-	else
-		self:OnGameOver()
-		return false
-	end
+    if self.remainingSheep > 0 then
+        self:OnRoundWin()
+        return true
+    else
+        self:OnGameOver()
+        return false
+    end
 end
 
 function Level:OnRoundWin()
-	mSounds.roundWin:play()
-	self:SetStageNum(self:GetStageNum() + 1)
-	self:Load()
+    mSounds.roundWin:play()
+    self:SetStageNum(self:GetStageNum() + 1)
+    self:Load()
 end
 
 function Level:OnGameOver()
@@ -171,33 +173,33 @@ function Level:OnGameOver()
 end
 
 local function GetEntitiesByFixtures(a, b)
-	local entities = mEntityManager:GetEntities()
-	local entityA, entityB = nil, nil
-	for i=1,#entities do
-		if entities[i].physics ~= nil then
-			if entities[i].physics.fixture == a then
-				entityA = entities[i]
-			elseif entities[i].physics.fixture == b then
-				entityB = entities[i]
-			end
-		end
-		if entityA ~= nil and entityB ~= nil then
-			return entityA, entityB
-		end
-	end
+    local entities = mEntityManager:GetEntities()
+    local entityA, entityB = nil, nil
+    for i=1,#entities do
+        if entities[i].physics ~= nil then
+            if entities[i].physics.fixture == a then
+                entityA = entities[i]
+            elseif entities[i].physics.fixture == b then
+                entityB = entities[i]
+            end
+        end
+        if entityA ~= nil and entityB ~= nil then
+            return entityA, entityB
+        end
+    end
 end
 
 function BeginContact(a, b, coll)
-	if a:getUserData() ~= b:getUserData() then
-		local entityA, entityB = GetEntitiesByFixtures(a, b)
-		if entityA ~= nil and entityA:is(Avatar) and entityB ~= nil and entityB:is(Avatar) then
-			if entityA:GetFaction() ~= entityB:GetFaction() then
-				entityA:Attack(entityB)
-				entityB:Attack(entityA)
-				mCheckWinState = true
-			end
-		end
-	end
+    if a:getUserData() ~= b:getUserData() then
+        local entityA, entityB = GetEntitiesByFixtures(a, b)
+        if entityA ~= nil and entityA:is(Avatar) and entityB ~= nil and entityB:is(Avatar) then
+            if entityA:GetFaction() ~= entityB:GetFaction() then
+                entityA:Attack(entityB)
+                entityB:Attack(entityA)
+                mCheckWinState = true
+            end
+        end
+    end
 end
  
 function EndContact(a, b, coll)

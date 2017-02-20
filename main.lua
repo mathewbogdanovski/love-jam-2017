@@ -43,8 +43,7 @@ local mPauseState = {}
 local function initWindow()
     love.window.setTitle("Game name")
     love.window.setIcon(love.image.newImageData("Assets/Graphics/Sheep.png"))
-    love.window.setMode(1920, 1080, { resizable=true, minwidth=400, minheight=300})
-    love.graphics.setBackgroundColor(0, 100, 0, 255)
+    love.window.setMode(1920, 1080, { fullscreen=true, resizable=true, minwidth=400, minheight=300})
 
     gWorldToScreenX = love.graphics.getWidth() / WORLD_MAX_X
     gWorldToScreenY = love.graphics.getHeight() / WORLD_MAX_Y
