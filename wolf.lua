@@ -16,7 +16,6 @@ function Wolf:new(x, y)
 
     self:RegisterPhysics(64, 64, "dynamic")
     self.physics.body:setFixedRotation(true)
-    self.debugPhysics = true
 
     self.baseSpeed = math.random(30, 60)
     self.killedSprite = Assets.Graphics.SheepDead
