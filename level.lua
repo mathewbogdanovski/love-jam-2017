@@ -19,8 +19,8 @@ function Level:new()
 
     self.bgSprite = Assets.Graphics.Background
     self.bgDecoInfo = {}
-    table.insert(self.bgDecoInfo, {sprite = Assets.Graphics.Flower, layer = 1, minNum = 5, maxNum = 14, canRotate = false})
-    table.insert(self.bgDecoInfo, {sprite = Assets.Graphics.Flower2, layer = 1, minNum = 5, maxNum = 14, canRotate = false})
+    --table.insert(self.bgDecoInfo, {sprite = Assets.Graphics.Flower, layer = 1, minNum = 5, maxNum = 14, canRotate = false})
+    --table.insert(self.bgDecoInfo, {sprite = Assets.Graphics.Flower2, layer = 1, minNum = 5, maxNum = 14, canRotate = false})
 end
 
 function Level:draw()
