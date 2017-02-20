@@ -97,6 +97,7 @@ function Level:Load()
     local currCol = 0
 
     for i = 1, self.remainingSheep do
+        mEntityManager:CreateSheep(
             xOffset + (currCol * widthIncrement) + widthIncrement / 2, 
             yOffset + (currRow * heightIncrement) + heightIncrement / 2)
 
