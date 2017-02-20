@@ -60,8 +60,8 @@ function Level:Load()
 	mEntityManager:RemoveAllEntities()
 
     self.levelLoaded = true
-    self.remainingSheep = math.min(self.remainingSheep + 10, MAX_NUM_SHEEP)
-    local fighterSheep = self.remainingSheep
+    self.remainingSheep = math.min(self.remainingSheep + 2, MAX_NUM_SHEEP)
+    local fighterSheep = self.remainingSheep / 4
 
 
     --sheep
@@ -76,6 +76,7 @@ function Level:Load()
     local heightIncrement = spawnHeight / numRows
     local currRow = 0
     local currCol = 0
+
     for i = 1, self.remainingSheep do
         local sheep = mEntityManager:CreateSheep(
             xOffset + (currCol * widthIncrement) + widthIncrement / 2, 
@@ -83,11 +84,8 @@ function Level:Load()
 
         if fighterSheep > 0 then
         	fighterSheep = fighterSheep - 1
-        	if fighterSheep % 4 == 0 then
-	        	sheep:SetAttackDamage(50)
-	        	sheep:SetHealth(100)
-	        	sheep:SetTag('shepherd')
-	        end
+        	sheep:SetAttackDamage(50)
+        	sheep:SetTag('shepherd')
         end
 
         currCol = currCol + 1
@@ -111,9 +109,9 @@ function Level:Load()
     end
 
     --walls
-    mEntityManager:CreateEmptyEntity(860, 0, true, 1920, 1)
-    mEntityManager:CreateEmptyEntity(860, 1080, true, 1920, 1)
-    mEntityManager:CreateEmptyEntity(0, 540, true, 1, 1080)
+    mEntityManager:CreateEmptyEntity(WORLD_MAX_X / 2, 0, true, WORLD_MAX_X, 1)
+    mEntityManager:CreateEmptyEntity(WORLD_MAX_X / 2, WORLD_MAX_Y, true, WORLD_MAX_X, 1)
+    mEntityManager:CreateEmptyEntity(0, WORLD_MAX_Y / 2, true, 1, WORLD_MAX_Y)
 
     mPhysicsWorld:setCallbacks(BeginContact, EndContact, PreSolve, PostSolve)
 end

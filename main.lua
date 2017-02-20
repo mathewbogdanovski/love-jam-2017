@@ -105,7 +105,7 @@ local function loadMainMenu()
     mUIManager.rootCtrl.coreContainer:addChild(content)
 
     local buttonA = UIButton:new()
-    buttonA:setPos(10, 10)
+    buttonA:setPos(100, 50)
     buttonA:setText("START")
     --buttonA:setIcon("Assets/Graphics/Sprites/box.png")
     buttonA:setAnchor(0, 0)
@@ -123,7 +123,7 @@ local function loadMainMenu()
     content:addChild(buttonA)
 
     local buttonB = UIButton:new()
-    buttonB:setPos(10, 50)
+    buttonB:setPos(100, 90)
     buttonB:setText("QUIT")
     buttonB:setAnchor(0, 0)
 
@@ -133,12 +133,7 @@ local function loadMainMenu()
 
     content:addChild(buttonB)
 
-    local highscoreLabel = UILabel:new("Assets/Fonts/expressway rg.ttf", "High Score: " .. mHighscore, 24)
-    highscoreLabel:setPos(50, 150)
-    highscoreLabel:setAnchor(0, 0)
-    highscoreLabel:setSize(300, 100)
-    highscoreLabel:setAutoSize(false)
-    content:addChild(highscoreLabel)
+    loadCommonUI(content)
 end
 
 function mMenuState:enter()
@@ -271,9 +266,8 @@ local function loadPauseMenu()
     mUIManager.rootCtrl.coreContainer:addChild(content)
 
     local buttonA = UIButton:new()
-    buttonA:setPos(10, 10)
-    buttonA:setSize(100, 35)
-    buttonA:setText("RESUME GAME")
+    buttonA:setPos(100, 50)
+    buttonA:setText("RESUME")
     buttonA:setAnchor(0, 0)
 
     buttonA.events:on(UI_CLICK, function()
@@ -284,8 +278,7 @@ local function loadPauseMenu()
     content:addChild(buttonA)
 
     local buttonB = UIButton:new()
-    buttonB:setPos(10, 50)
-    buttonB:setSize(100, 35)
+    buttonB:setPos(100, 90)
     buttonB:setText("MAIN MENU")
     buttonB:setAnchor(0, 0)
 
@@ -294,6 +287,8 @@ local function loadPauseMenu()
     end, buttonB)
 
     content:addChild(buttonB)
+
+    loadCommonUI(content)
 end
 
 function mPauseState:enter()
