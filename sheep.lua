@@ -37,15 +37,21 @@ function Sheep:update(dt)
         return
     end
 
-    local mousePosition = Vector(love.mouse:getX() / gWorldToScreenX, love.mouse:getY() / gWorldToScreenY)
-    local distanceVector = self.position - mousePosition
-    local distance = distanceVector:len()
-    if distance <= MAXIMUM_PLAYER_DISTANCE then
-        local speedMultiplier = math.max(MINIMUM_CHASE_SPEED_MULTIPLIER, 200 / distance)
-        self:SetSpeedMultiplier(speedMultiplier)
-        self:MoveInDirection(distanceVector:normalized())
-        self.idleTimer = 0
-    else
+    local mouseMoved = false
+    if love.mouse.isDown(1) == true then
+        local mousePosition = Vector(love.mouse:getX() / gWorldToScreenX, love.mouse:getY() / gWorldToScreenY)
+        local distanceVector = self.position - mousePosition
+        local distance = distanceVector:len()
+        if distance <= MAXIMUM_PLAYER_DISTANCE then
+            local speedMultiplier = math.max(MINIMUM_CHASE_SPEED_MULTIPLIER, 200 / distance)
+            self:SetSpeedMultiplier(speedMultiplier)
+            self:MoveInDirection(distanceVector:normalized())
+            self.idleTimer = 0
+            mouseMoved = true
+        end
+    end
+
+    if not mouseMoved then
         self.idleTimer = self.idleTimer + dt
         if self.idleTimer >= self.idleTime then
             self.idleTimer = 0

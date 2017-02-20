@@ -105,6 +105,9 @@ function Level:Load()
     	mEntityManager:CreateWolf(1600, yValue)
     	mEntityManager:CreateWolf(1600, yValue + 100)
     	yValue = yValue + 200
+    	if yValue >= WORLD_MAX_Y then
+    		break
+    	end
     end
 
     --walls

@@ -3,6 +3,7 @@ require "catui"
 Vector = require "Libraries.hump.vector"
 Ripple = require "Libraries.ripple.ripple"
 
+mHighscore = 0
 mLevel = nil
 mSoundTags = {
     sfx = Ripple.newTag(),
@@ -49,6 +50,18 @@ local function initWindow()
     gWorldToScreenY = love.graphics.getHeight() / WORLD_MAX_Y
 end
 
+local function loadHighscore()
+    if not love.filesystem.exists("data") then
+        love.filesystem.newFile("data")
+        love.filesystem.write("data", "highscore\n=\n" .. 20)
+    end
+    local saveData = {}
+    for lines in love.filesystem.lines("data") do
+        table.insert(saveData, lines)
+    end
+    mHighscore = tonumber(saveData[3])
+end
+
 function love.load()
     initWindow()
 
@@ -58,6 +71,8 @@ function love.load()
     mUIManager = UIManager:getInstance()
     
     mPhysicsWorld = love.physics.newWorld(0, 0, true)
+
+    loadHighscore()
 
     Gamestate.registerEvents()
     Gamestate.switch(mMenuState)
@@ -117,6 +132,13 @@ local function loadMainMenu()
     end, buttonB)
 
     content:addChild(buttonB)
+
+    local highscoreLabel = UILabel:new("Assets/Fonts/expressway rg.ttf", "High Score: " .. mHighscore, 24)
+    highscoreLabel:setPos(50, 150)
+    highscoreLabel:setAnchor(0, 0)
+    highscoreLabel:setSize(300, 100)
+    highscoreLabel:setAutoSize(false)
+    content:addChild(highscoreLabel)
 end
 
 function mMenuState:enter()
@@ -228,6 +250,10 @@ end
 
 CheckWinState = function()
     if mLevel:CheckWinState() == true then
+        if mLevel:GetScore() > mHighscore then
+            mHighscore = mLevel:GetScore()
+            love.filesystem.write("data", "highscore\n=\n" .. mHighscore)
+        end
         if mLevel:EndRound() == true then
         else
             Gamestate.switch(mMenuState)
