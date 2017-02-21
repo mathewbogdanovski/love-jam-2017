@@ -38,6 +38,7 @@ function Level:GenerateInsects(dt)
         self.insectTimer = self.insectTimer + dt
         if self.insectTimer >= self.insectTime then
             self:SelectInsectTime()
+            local numInsects = math.random(1, 4)
             for i=1,numInsects do
                 local pos = self:GetRandomBorderPosition(30)
                 mEntityManager:CreateInsect(pos.x, pos.y)
@@ -113,6 +114,7 @@ function Level:Load()
     end
 
     --sheep
+    self.remainingSheep = math.min(self.remainingSheep + math.max(2, self.remainingSheep * 0.3), MAX_NUM_SHEEP)
     local fighterSheep = math.min(6, math.max(1, self.remainingSheep / 4))
 
     local xOffset = 50
