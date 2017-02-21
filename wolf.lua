@@ -17,7 +17,7 @@ function Wolf:new(x, y)
     self:RegisterPhysics(64, 64, "dynamic")
     self.physics.body:setFixedRotation(true)
 
-    self.baseSpeed = math.random(50, 80)
+    self.baseSpeed = math.random(70, 110)
     self.killedSprite = Assets.Graphics.SheepDead
 
     self.targetTimer = 0
@@ -28,6 +28,7 @@ function Wolf:Kill()
     self.super.Kill(self)
     self:SetSpriteVerticalMirror(true)
     self:SetLayer(9)
+    mSounds.wolfKilled:play()
 end
 
 function Wolf:update(dt)

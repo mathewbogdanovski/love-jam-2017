@@ -14,7 +14,7 @@ function Insect:new(x, y)
     self:RegisterPhysics(30, 30, "dynamic")
     self.physics.body:setFixedRotation(true)
 
-    self.baseSpeed = math.random(30, 60)
+    self.baseSpeed = math.random(70 + mLevel:GetStageNum() * 5, 110 + mLevel:GetStageNum() * 5)
     self.killedSprite = Assets.Graphics.InsectDead
 
     self.targetTimer = 0

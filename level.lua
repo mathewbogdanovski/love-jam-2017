@@ -38,15 +38,18 @@ function Level:GenerateInsects(dt)
         self.insectTimer = self.insectTimer + dt
         if self.insectTimer >= self.insectTime then
             self:SelectInsectTime()
-            local pos = self:GetRandomBorderPosition(30)
-            mEntityManager:CreateInsect(pos.x, pos.y)
+            local numInsects = math.random(1, 4)
+            for i=1,numInsects do
+                local pos = self:GetRandomBorderPosition(30)
+                mEntityManager:CreateInsect(pos.x, pos.y)
+            end
         end
     end
 end
 
 function Level:SelectInsectTime()
     self.insectTimer = 0
-    self.insectTime = 5 - (self.stage * 0.3)
+    self.insectTime = 5 - (self.stage * 0.35)
 end
 
 function Level:UpdateSheepStatus()
@@ -111,7 +114,7 @@ function Level:Load()
     end
 
     --sheep
-    self.remainingSheep = math.min(self.remainingSheep + math.max(1, self.remainingSheep * 0.3), MAX_NUM_SHEEP)
+    self.remainingSheep = math.min(self.remainingSheep + math.max(2, self.remainingSheep * 0.3), MAX_NUM_SHEEP)
     local fighterSheep = math.min(6, math.max(1, self.remainingSheep / 4))
 
     local xOffset = 50
@@ -235,11 +238,11 @@ function Level:CheckWinState()
             break
         end
     end
-    return((roundOverSheep and self.remainingSheep == 0) or (roundOverShepherd and self.remainingShepherds == 0) or (roundOverSheep and roundOverShepherd))
+    return((roundOverSheep and self.remainingSheep == 0) or (roundOverSheep and roundOverShepherd))
 end
 
 function Level:EndRound()
-    if self.remainingSheep > 0 and self.remainingShepherds > 0 then
+    if self.remainingSheep > 0 then
         self:OnRoundWin()
         return true
     else

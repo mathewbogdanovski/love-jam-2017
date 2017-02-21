@@ -14,7 +14,9 @@ mSounds = {
     sheepSaved = Ripple.newSound('Assets/Audio/Sound/sheepsaved.ogg', {tags = {mSoundTags.sfx, mSoundTags.master}}),
     sheepKilled = Ripple.newSound('Assets/Audio/Sound/sheepkilled.ogg', {tags = {mSoundTags.sfx, mSoundTags.master}}),
     insectKilled = Ripple.newSound('Assets/Audio/Sound/insectkilled.ogg', {tags = {mSoundTags.sfx, mSoundTags.master}}),
-    roundWin = Ripple.newSound('Assets/Audio/Sound/roundwin.ogg', {tags = {mSoundTags.sfx, mSoundTags.master}})
+    wolfKilled = Ripple.newSound('Assets/Audio/Sound/wolfkilled.ogg', {tags = {mSoundTags.sfx, mSoundTags.master}}),
+    roundWin = Ripple.newSound('Assets/Audio/Sound/roundwin.ogg', {tags = {mSoundTags.sfx, mSoundTags.master}}),
+    gameOver = Ripple.newSound('Assets/Audio/Sound/gameover.ogg', {tags = {mSoundTags.sfx, mSoundTags.master}})
 }
 mMusic = {
   gameplay = Ripple.newSound('Assets/Audio/Music/gameplay.ogg', {
@@ -296,6 +298,7 @@ CheckWinState = function()
         end
         if mLevel:EndRound() == true then
         else
+            mSounds.gameOver:play()
             mGameover = true
             Gamestate.switch(mMenuState)
         end
