@@ -44,7 +44,7 @@ local mGameState = {}
 local mPauseState = {}
 
 local function initWindow()
-    love.window.setTitle("Game name")
+    love.window.setTitle("Shepherd's Hand")
     love.window.setIcon(love.image.newImageData("Assets/Graphics/Sheep.png"))
     love.window.setMode(1920, 1080, { fullscreen=true, resizable=true, minwidth=400, minheight=300})
 
