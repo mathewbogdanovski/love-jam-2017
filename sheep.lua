@@ -84,7 +84,7 @@ function Sheep:update(dt)
             if self.wolf ~= nil and not self.wolf:IsKilled() then
                 direction = self.wolf:GetPosition() - self:GetPosition()
             end
-            self:SetSpeedMultiplier(1)
+            self:SetSpeedMultiplier(2)
             self:MoveInDirection(direction:normalized())
         else
             self.idleTimer = self.idleTimer + dt
