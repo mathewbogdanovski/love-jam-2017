@@ -9,19 +9,19 @@ local MIN_IDLE_TIME = 1
 local MAX_IDLE_TIME = 3
 
 function Shepherd:new(x, y)
-    Shepherd.super.new(self, Assets.Graphics.Sheep, x, y)
+    Shepherd.super.new(self, Assets.Graphics.Shepherd, x, y)
     self:SetFaction(GC_FACTIONS.PLAYER)
     self.layer = 10
     self.tag = 'sheep'
 
-    self:RegisterPhysics(50, 50, "dynamic")
+    self:RegisterPhysics(70, 70, "dynamic")
     self.physics.body:setFixedRotation(true)
 
     self.attackDamage = 50
     self.baseSpeed = 50
     self.idleTime = math.random(MIN_IDLE_TIME, MAX_IDLE_TIME)
     self.idleTimer = 0
-    self.killedSprite = Assets.Graphics.SheepDead
+    self.killedSprite = Assets.Graphics.ShepherdDead
 end
 
 function Shepherd:Kill()
@@ -70,12 +70,4 @@ function Shepherd:update(dt)
             self:MoveInDirection(newDirection)
         end
     end
-end
-
-function Shepherd:draw()
-    love.graphics.push()
-        love.graphics.setColor(0, 0, 255, 255)
-        Shepherd.super.draw(self)
-        love.graphics.setColor(255, 255, 255, 255)
-    love.graphics.pop()
 end
