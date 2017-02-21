@@ -28,6 +28,7 @@ function Insect:Kill()
     self.super.Kill(self)
     self:SetSpriteVerticalMirror(true)
     self:SetLayer(9)
+    mSounds.insectKilled:play()
 end
 
 function Insect:Attack(target)

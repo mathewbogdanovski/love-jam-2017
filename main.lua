@@ -2,6 +2,7 @@ require "catui"
 Vector = require "Libraries.hump.vector"
 Ripple = require "Libraries.ripple.ripple"
 
+mGameover = false
 mHighscore = 0
 mLevel = nil
 mSoundTags = {
@@ -12,6 +13,7 @@ mSoundTags = {
 mSounds = {
     sheepSaved = Ripple.newSound('Assets/Audio/Sound/sheepsaved.ogg', {tags = {mSoundTags.sfx, mSoundTags.master}}),
     sheepKilled = Ripple.newSound('Assets/Audio/Sound/sheepkilled.ogg', {tags = {mSoundTags.sfx, mSoundTags.master}}),
+    insectKilled = Ripple.newSound('Assets/Audio/Sound/insectkilled.ogg', {tags = {mSoundTags.sfx, mSoundTags.master}}),
     roundWin = Ripple.newSound('Assets/Audio/Sound/roundwin.ogg', {tags = {mSoundTags.sfx, mSoundTags.master}})
 }
 mMusic = {
@@ -96,7 +98,7 @@ end
 --------------- MENU STATE ---------------
 
 local function loadCommonUI(content)
-    local instructions = "Safely escort the shepherds and sheep across the fields (to the right) for as long as possible. \n\n Left click to herd animals. Hold shift to herd faster. \n Right click to squash bugs. \n Wolves are afraid of shepherds."
+    local instructions = "Safely escort the shepherds and sheep across the fields (to the right) for as long as possible. \n\n Left click to herd. Hold shift to herd faster. \n Right click to squash bugs. \n Sheep follow closest shepherds. Wolves are afraid of shepherds."
     local instructionsLabel = UILabel:new("Assets/Fonts/expressway rg.ttf", instructions, 24)
     instructionsLabel:setPos(350, 25)
     instructionsLabel:setAnchor(0, 0)
@@ -118,6 +120,17 @@ local function loadCommonUI(content)
     highscoreLabel:setSize(300, 100)
     highscoreLabel:setAutoSize(false)
     content:addChild(highscoreLabel)
+
+    if mGameover == true then
+        highscoreLabel = UILabel:new("Assets/Fonts/expressway rg.ttf", "Game Over\nFinal Score: " .. mLevel:GetScore(), 30)
+        highscoreLabel:setFontColor({255, 255, 255, 255})
+        highscoreLabel:setPos(60, 250)
+        highscoreLabel:setAnchor(0, 0)
+        highscoreLabel:setSize(300, 100)
+        highscoreLabel:setAutoSize(false)
+        content:addChild(highscoreLabel)
+        mGameover = false
+    end
 end
 
 local function loadMainMenu()
@@ -283,6 +296,7 @@ CheckWinState = function()
         end
         if mLevel:EndRound() == true then
         else
+            mGameover = true
             Gamestate.switch(mMenuState)
         end
     end
