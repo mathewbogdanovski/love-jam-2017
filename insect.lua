@@ -22,13 +22,19 @@ function Insect:new(x, y)
 
     self.attackDamage = 0
     self.attackSpeed = 2.5
+    self.debugPhysics = false
 end
 
 function Insect:Kill()
     self.super.Kill(self)
-    self:SetSpriteVerticalMirror(true)
+    self:SetSpriteVerticalMirror(false)
     self:SetLayer(9)
     mSounds.insectKilled:play()
+end
+
+function Insect:MoveInDirection(direction)
+    Insect.super.MoveInDirection(self, direction)
+    self:SetSpriteHorizontalMirror(false)
 end
 
 function Insect:Attack(target)
@@ -57,6 +63,13 @@ function Insect:update(dt)
     if self:IsKilled() then
         return
     end
+
+    local velNorm = self:GetVelocity():normalized()
+    local angle = math.acos(velNorm.x)
+    if velNorm.y < 0 then
+        angle = angle * -1
+    end
+    self:SetRotation(angle)
 
     if self.target ~= nil and (self.target:IsGarbage() or self.target:IsKilled()) then
         self.target = nil

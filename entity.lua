@@ -22,7 +22,6 @@ function Entity:update(dt)
     if self:HasPhysics() then
         self.position.x = self.physics.body:getX()
         self.position.y = self.physics.body:getY()
-        self.rotation = self.physics.body:getAngle()
     end
 end
 
@@ -39,14 +38,14 @@ function Entity:draw()
 
         if self:HasPhysics() and self.debugPhysics == true then
             love.graphics.push()
-                love.graphics.translate(self.position.x * gWorldToScreenX,
-                                         self.position.y * gWorldToScreenY)
-                love.graphics.rotate(self.rotation)
-                love.graphics.rectangle("line", 
-                                          -self.physics.width / 2 * self.scale * gWorldToScreenX, 
-                                          -self.physics.height / 2 * self.scale * gWorldToScreenY, 
-                                          self.physics.width * self.scale * gWorldToScreenX, 
-                                          self.physics.height * self.scale * gWorldToScreenY)
+                love.graphics.translate(self.physics.body:getX() * gWorldToScreenX,
+                                         self.physics.body:getY() * gWorldToScreenY)
+                                        love.graphics.rotate(self.physics.body:getAngle())
+                                        love.graphics.rectangle("line", 
+                                        -self.physics.width / 2 * self.scale * gWorldToScreenX, 
+                                        -self.physics.height / 2 * self.scale * gWorldToScreenY, 
+                                        self.physics.width * self.scale * gWorldToScreenX, 
+                                        self.physics.height * self.scale * gWorldToScreenY)
             love.graphics.pop()
         end
     end
@@ -72,10 +71,8 @@ function Entity:GetPosition()
 end
 
 function Entity:SetRotation(rotation)
-    self.rotation = rotation % (2 * math.pi)
-    if self:HasPhysics() then
-        self.physics.body:setAngle(self.rotation)
-    end
+    local twoPi = 2 * math.pi
+    self.rotation = (rotation  + twoPi) % (twoPi)
 end
 
 function Entity:GetRotation()
