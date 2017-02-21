@@ -38,7 +38,7 @@ function Level:GenerateInsects(dt)
         self.insectTimer = self.insectTimer + dt
         if self.insectTimer >= self.insectTime then
             self:SelectInsectTime()
-            local numInsects = math.random(1, 4)
+            local numInsects = math.random(1, 3)
             for i=1,numInsects do
                 local pos = self:GetRandomBorderPosition(30)
                 mEntityManager:CreateInsect(pos.x, pos.y)
