@@ -100,7 +100,7 @@ end
 --------------- MENU STATE ---------------
 
 local function loadCommonUI(content)
-    local instructions = "Safely escort the shepherds and sheep across the fields (to the right) for as long as possible. \n\n Left click to herd. Hold shift to herd faster. \n Right click to squash bugs. \n Sheep follow closest shepherds. Wolves are afraid of shepherds."
+    local instructions = "Safely escort the shepherds and sheep across the fields (to the right) for as many rounds as possible. \n\n Left click to herd sheep. Hold shift to herd faster. \n Right click to direct shepherds \n Right click to squash bugs. \n Sheep follow closest shepherds. Wolves are afraid of shepherds."
     local instructionsLabel = UILabel:new("Assets/Fonts/expressway rg.ttf", instructions, 24)
     instructionsLabel:setPos(350, 25)
     instructionsLabel:setAnchor(0, 0)

@@ -39,7 +39,7 @@ function Shepherd:update(dt)
     end
 
     local mouseMoved = false
-    if love.mouse.isDown(1) == true then
+    if love.mouse.isDown(2) == true then
         local mousePosition = Vector(love.mouse:getX() / gWorldToScreenX, love.mouse:getY() / gWorldToScreenY)
         local distanceVector = self.position - mousePosition
         local distance = distanceVector:len()
